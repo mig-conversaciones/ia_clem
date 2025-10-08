@@ -392,9 +392,33 @@
             height: 24px;
             cursor: pointer;
         }
+        .checklist li label {
+            flex: 1;
+        }
         .checklist li.checked {
             background: rgba(230, 126, 34, 0.2);
             border-left: 4px solid var(--forge);
+        }
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: rgba(230, 126, 34, 0.15);
+            color: var(--forge);
+            transition: all 0.3s ease;
+        }
+        .status-chip.completed {
+            background: rgba(79, 172, 254, 0.25);
+            color: var(--success);
+        }
+        .mini-note {
+            font-size: 0.85rem;
+            opacity: 0.75;
+            margin-top: 0.35rem;
         }
         .success-modal {
             position: fixed;
@@ -646,4 +670,831 @@
             </ul>
             <button class="add-criteria-btn" onclick="addMatrixCriteria()">
                 <i class="bi bi-plus-circle"></i> Agregar Criterio
-            </button
+            </button>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Niveles de Desempeño</label>
+            <p style="opacity: 0.7; font-size: 0.9rem; margin-bottom: 1rem;">Define al menos 3 niveles para valorar el avance</p>
+            <ul class="criteria-list" id="matrixLevelsList">
+                <li class="criteria-item">
+                    <input type="text" class="form-input" placeholder="Ej: Inicial" data-level="1">
+                </li>
+                <li class="criteria-item">
+                    <input type="text" class="form-input" placeholder="Ej: Competente" data-level="2">
+                </li>
+            </ul>
+            <button class="add-criteria-btn" onclick="addMatrixLevel()">
+                <i class="bi bi-plus-circle"></i> Agregar Nivel
+            </button>
+        </div>
+        <div class="button-group">
+            <button class="btn-action btn-secondary" onclick="generateMatrixAI()">
+                <i class="bi bi-magic"></i> Generar con IA
+            </button>
+            <button class="btn-action btn-primary" onclick="previewMatrix()">
+                <i class="bi bi-eye"></i> Vista Previa
+            </button>
+        </div>
+        <div id="matrixPreview" style="display: none; margin-top: 3rem;">
+            <h3 style="margin-bottom: 2rem;">📊 Matriz Generada</h3>
+            <div style="overflow-x: auto;">
+                <table class="preview-table" id="matrixTable"></table>
+            </div>
+            <div class="button-group" style="margin-top: 2rem;">
+                <button class="btn-action btn-secondary" onclick="copyMatrixText()">
+                    <i class="bi bi-clipboard"></i> Copiar Texto
+                </button>
+                <button class="btn-action btn-primary" onclick="exportMatrixHTML()">
+                    <i class="bi bi-file-earmark-code"></i> Exportar HTML
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="multiExportToolkit" class="project-container">
+        <h2 class="project-title">🧰 Exportación Múltiple</h2>
+        <p style="text-align: center; max-width: 780px; margin: 0 auto 2rem; opacity: 0.85;">
+            Combina tus instrumentos generados y llévalos a tu portafolio en un solo paso. Selecciona los que quieras incluir y copia un resumen unificado o descarga un paquete HTML listo para compartir.
+        </p>
+        <ul class="checklist" style="margin-top: 2rem;">
+            <li>
+                <input type="checkbox" id="includeRubric" disabled>
+                <label for="includeRubric">
+                    <strong>Rúbrica Analítica</strong>
+                    <div class="mini-note">Estado: <span class="status-chip" id="rubricStatus">Pendiente</span></div>
+                </label>
+            </li>
+            <li>
+                <input type="checkbox" id="includeChecklist" disabled>
+                <label for="includeChecklist">
+                    <strong>Lista de Cotejo</strong>
+                    <div class="mini-note">Estado: <span class="status-chip" id="checklistStatus">Pendiente</span></div>
+                </label>
+            </li>
+            <li>
+                <input type="checkbox" id="includeMatrix" disabled>
+                <label for="includeMatrix">
+                    <strong>Matriz de Evaluación</strong>
+                    <div class="mini-note">Estado: <span class="status-chip" id="matrixStatus">Pendiente</span></div>
+                </label>
+            </li>
+        </ul>
+        <div class="button-group">
+            <button class="btn-action btn-secondary" onclick="copyCombinedToolkit()">
+                <i class="bi bi-clipboard-check"></i> Copiar Toolkit
+            </button>
+            <button class="btn-action btn-primary" onclick="exportCombinedHTML()">
+                <i class="bi bi-download"></i> Descargar Paquete HTML
+            </button>
+        </div>
+    </section>
+
+    <section id="finalToolkit" class="project-container">
+        <h2 class="project-title">🚀 Proyecto Final: Toolkit del Forjador</h2>
+        <p style="text-align: center; max-width: 780px; margin: 0 auto 2rem; opacity: 0.85;">
+            Reúne los tres instrumentos diseñados en esta estación, personalízalos para tu contexto y consolídalos en un toolkit profesional listo para compartir con tu equipo de formación.
+        </p>
+        <ol style="max-width: 780px; margin: 0 auto 2rem; line-height: 1.7;">
+            <li>Genera la <strong>rúbrica</strong>, la <strong>lista de cotejo</strong> y la <strong>matriz</strong> ajustadas a tu programa.</li>
+            <li>Usa la <strong>exportación múltiple</strong> para obtener una versión integrada en texto o HTML.</li>
+            <li>Comparte el toolkit con tu equipo o súbelo a tu LMS como evidencia.</li>
+        </ol>
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div class="status-chip" id="toolkitStatus">Pendiente</div>
+            <p class="mini-note" id="bundleNotice" style="margin-top: 0.75rem;">Genera los tres instrumentos con IA para habilitar el toolkit.</p>
+        </div>
+        <div class="button-group">
+            <button class="btn-action btn-primary" onclick="finalizeToolkit()">
+                <i class="bi bi-trophy"></i> Marcar Toolkit como Completado
+            </button>
+        </div>
+    </section>
+
+    </main>
+
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">🏅</div>
+            <h2 class="success-title">¡Toolkit Forjado con Éxito!</h2>
+            <div class="badge-earned">
+                <i class="bi bi-award-fill"></i> Insignia "Maestro Forjador" desbloqueada
+            </div>
+            <p style="opacity: 0.8; margin-bottom: 2rem;">Consolidaste tus instrumentos y estás listo para llevarlos al aula o al taller.</p>
+            <div class="button-group">
+                <button class="btn-action btn-primary" onclick="claimRewards()">
+                    <i class="bi bi-check-circle"></i> Registrar Progreso
+                </button>
+                <button class="btn-action btn-secondary" onclick="closeModal()">
+                    <i class="bi bi-arrow-counterclockwise"></i> Seguir Creando
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const bodyElement = document.body;
+        const savedTheme = localStorage.getItem('odisea-theme') || 'dark';
+        bodyElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = bodyElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            bodyElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('odisea-theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'bi bi-sun-fill';
+            } else {
+                icon.className = 'bi bi-moon-stars-fill';
+            }
+        }
+
+        const toolsSelection = document.getElementById('toolsSelection');
+        const generators = {
+            rubric: document.getElementById('rubricGenerator'),
+            checklist: document.getElementById('checklistGenerator'),
+            matrix: document.getElementById('matrixGenerator')
+        };
+
+        function showGenerator(type) {
+            toolsSelection.style.display = 'none';
+            Object.values(generators).forEach(section => section.classList.remove('active'));
+            const target = generators[type];
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function backToTools() {
+            Object.values(generators).forEach(section => section.classList.remove('active'));
+            toolsSelection.style.display = 'block';
+            window.scrollTo({ top: toolsSelection.offsetTop - 80, behavior: 'smooth' });
+        }
+
+        function enhanceExistingList(listId) {
+            const list = document.getElementById(listId);
+            if (!list) return;
+            list.querySelectorAll('li').forEach(item => {
+                if (!item.querySelector('.remove-btn')) {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'remove-btn';
+                    btn.innerHTML = '&times;';
+                    btn.addEventListener('click', () => item.remove());
+                    item.appendChild(btn);
+                }
+            });
+        }
+
+        function createListItem(listId, placeholder, value = '') {
+            const list = document.getElementById(listId);
+            if (!list) return;
+            const li = document.createElement('li');
+            li.className = 'criteria-item';
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'form-input';
+            input.placeholder = placeholder;
+            input.value = value;
+            li.appendChild(input);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'remove-btn';
+            removeBtn.innerHTML = '&times;';
+            removeBtn.addEventListener('click', () => li.remove());
+            li.appendChild(removeBtn);
+
+            list.appendChild(li);
+            input.focus();
+        }
+
+        enhanceExistingList('rubricCriteriaList');
+        enhanceExistingList('checklistItemsList');
+        enhanceExistingList('matrixCriteriaList');
+        enhanceExistingList('matrixLevelsList');
+
+        function addRubricCriteria() {
+            createListItem('rubricCriteriaList', 'Ej: Calidad técnica del trabajo');
+        }
+
+        function addChecklistItem() {
+            createListItem('checklistItemsList', 'Ej: Presenta conclusiones basadas en evidencia');
+        }
+
+        function addMatrixCriteria() {
+            createListItem('matrixCriteriaList', 'Ej: Selección de técnicas estadísticas');
+        }
+
+        function addMatrixLevel() {
+            createListItem('matrixLevelsList', 'Ej: Sobresaliente');
+        }
+
+        const generatedInstruments = {
+            rubric: null,
+            checklist: null,
+            matrix: null,
+            bundleReady: false
+        };
+
+        const statusElements = {
+            rubric: document.getElementById('rubricStatus'),
+            checklist: document.getElementById('checklistStatus'),
+            matrix: document.getElementById('matrixStatus')
+        };
+
+        const includeCheckboxes = {
+            rubric: document.getElementById('includeRubric'),
+            checklist: document.getElementById('includeChecklist'),
+            matrix: document.getElementById('includeMatrix')
+        };
+
+        function updateInstrumentStatus(type, ready) {
+            const status = statusElements[type];
+            const checkbox = includeCheckboxes[type];
+            if (!status || !checkbox) return;
+            if (ready) {
+                status.textContent = 'Listo';
+                status.classList.add('completed');
+                checkbox.disabled = false;
+                checkbox.checked = true;
+            } else {
+                status.textContent = 'Pendiente';
+                status.classList.remove('completed');
+                checkbox.checked = false;
+                checkbox.disabled = true;
+            }
+            markBundleOutdated();
+        }
+
+        function markBundleOutdated() {
+            generatedInstruments.bundleReady = false;
+            updateToolkitReadiness();
+        }
+
+        function getRubricLevels() {
+            return ['Inicial', 'En desarrollo', 'Competente', 'Avanzado', 'Experto'];
+        }
+
+        function getBloomVerbs(level) {
+            const sets = {
+                '1': ['Reconoce', 'Identifica', 'Describe', 'Clasifica', 'Explica'],
+                '2': ['Comprende', 'Interpreta', 'Relaciona', 'Resume', 'Argumenta'],
+                '3': ['Aplica', 'Ejecuta', 'Opera', 'Resuelve', 'Optimiza'],
+                '4': ['Analiza', 'Diferencia', 'Evalúa', 'Integra', 'Sistematiza'],
+                '5': ['Valora', 'Justifica', 'Audita', 'Controla', 'Dirige'],
+                '6': ['Diseña', 'Formula', 'Innova', 'Implementa', 'Lidera']
+            };
+            return sets[level] || sets['3'];
+        }
+
+        function createRubricDescriptor(criterion, index, bloomLevel) {
+            const verbs = getBloomVerbs(bloomLevel);
+            const nuances = [
+                'con acompañamiento constante y siguiendo guías básicas',
+                'cumpliendo parcialmente los criterios establecidos',
+                'demostrando desempeño estable con retroalimentación puntual',
+                'argumentando sus decisiones con criterios técnicos',
+                'aportando mejoras, innovaciones y liderazgo en el proceso'
+            ];
+            const verb = verbs[Math.min(index, verbs.length - 1)];
+            const nuance = nuances[index] || nuances[nuances.length - 1];
+            return `${verb} ${criterion.toLowerCase()} ${nuance}.`;
+        }
+
+        function collectListValues(listId) {
+            const list = document.getElementById(listId);
+            if (!list) return [];
+            return Array.from(list.querySelectorAll('input'))
+                .map(input => input.value.trim())
+                .filter(Boolean);
+        }
+
+        function generateRubricAI() {
+            const bloomLevel = document.getElementById('rubricBloom').value || '3';
+            const suggestionsByBloom = {
+                '1': ['Memorización de conceptos clave', 'Identificación de herramientas básicas', 'Reconocimiento de normas de seguridad', 'Registro de datos esenciales'],
+                '2': ['Comprensión del procedimiento', 'Interpretación de instrucciones técnicas', 'Clasificación de materiales', 'Explicación del propósito de cada etapa'],
+                '3': ['Ejecución del proceso completo', 'Calidad del producto final', 'Uso adecuado de recursos', 'Autonomía en la resolución de problemas'],
+                '4': ['Análisis de resultados', 'Control de calidad y ajustes', 'Gestión del tiempo y recursos', 'Sustentación de decisiones tomadas'],
+                '5': ['Evaluación crítica del desempeño', 'Retroalimentación a compañeros', 'Aseguramiento de estándares', 'Gestión de riesgos y contingencias'],
+                '6': ['Innovación en soluciones', 'Diseño de mejoras al proceso', 'Integración de tecnologías emergentes', 'Transferencia de conocimiento al equipo']
+            };
+            const suggestions = suggestionsByBloom[bloomLevel] || ['Planificación del proceso', 'Ejecución técnica', 'Control de calidad', 'Comunicación de resultados'];
+            const list = document.getElementById('rubricCriteriaList');
+            list.innerHTML = '';
+            suggestions.forEach(text => createListItem('rubricCriteriaList', 'Criterio de evaluación', text));
+            alert('✨ Sugerencias generadas. Ajusta los criterios antes de obtener la vista previa.');
+        }
+
+        function buildRubricData() {
+            const competencia = document.getElementById('rubricCompetencia').value.trim();
+            const bloomLevel = document.getElementById('rubricBloom').value || '3';
+            const criteria = collectListValues('rubricCriteriaList');
+            if (!competencia) {
+                alert('Por favor describe la competencia o actividad a evaluar.');
+                return null;
+            }
+            if (criteria.length < 3) {
+                alert('Agrega al menos 3 criterios para la rúbrica.');
+                return null;
+            }
+            const levels = getRubricLevels();
+            const rows = criteria.map(criterion => ({
+                name: criterion,
+                descriptors: levels.map((_, index) => createRubricDescriptor(criterion, index, bloomLevel))
+            }));
+            return { competencia, bloomLevel, levels, rows };
+        }
+
+        function generateRubricTableHTML(data) {
+            const header = '<tr><th>Criterio</th>' + data.levels.map(level => `<th>${level}</th>`).join('') + '</tr>';
+            const body = data.rows
+                .map(row => {
+                    const cells = row.descriptors.map(desc => `<td>${desc}</td>`).join('');
+                    return `<tr><td>${row.name}</td>${cells}</tr>`;
+                })
+                .join('');
+            return `<thead>${header}</thead><tbody>${body}</tbody>`;
+        }
+
+        function previewRubric() {
+            const data = buildRubricData();
+            if (!data) return;
+            const table = document.getElementById('rubricTable');
+            table.innerHTML = generateRubricTableHTML(data);
+            document.getElementById('rubricPreview').style.display = 'block';
+            generatedInstruments.rubric = data;
+            updateInstrumentStatus('rubric', true);
+        }
+
+        function buildRubricText(data) {
+            let text = `RÚBRICA ANALÍTICA\nCompetencia: ${data.competencia}\nNiveles: ${data.levels.join(' | ')}`;
+            data.rows.forEach(row => {
+                text += `\n\n${row.name}`;
+                row.descriptors.forEach((desc, index) => {
+                    text += `\n- ${data.levels[index]}: ${desc}`;
+                });
+            });
+            return text;
+        }
+
+        function buildRubricHTML(data) {
+            const tableHTML = generateRubricTableHTML(data);
+            const body = [
+                '<h1>Rúbrica Analítica</h1>',
+                `<p><strong>Competencia:</strong> ${data.competencia}</p>`,
+                `<p><strong>Niveles:</strong> ${data.levels.join(', ')}</p>`,
+                `<table border="1" cellpadding="10" cellspacing="0" style="width:100%; border-collapse:collapse;">${tableHTML}</table>`
+            ].join('');
+            return wrapHTMLDocument('Rúbrica Analítica', body);
+        }
+
+        function copyRubricText() {
+            if (!generatedInstruments.rubric) {
+                alert('Primero genera la vista previa de la rúbrica.');
+                return;
+            }
+            copyTextToClipboard(buildRubricText(generatedInstruments.rubric), '✅ Rúbrica copiada al portapapeles');
+        }
+
+        function exportRubricHTML() {
+            if (!generatedInstruments.rubric) {
+                alert('Primero genera la vista previa de la rúbrica.');
+                return;
+            }
+            downloadFile('rubrica-analitica.html', buildRubricHTML(generatedInstruments.rubric));
+        }
+
+        function generateChecklistAI() {
+            const actividad = document.getElementById('checklistActividad').value.trim() || 'el producto';
+            const base = actividad.toLowerCase();
+            const suggestions = [
+                `Entrega evidencia completa de ${base}`,
+                `Cumple con las especificaciones técnicas de ${base}`,
+                `Presenta documentación oportuna de ${base}`,
+                `Demuestra manejo adecuado de recursos durante ${base}`,
+                `Incluye criterios de seguridad y normatividad en ${base}`,
+                `Mantiene orden y limpieza antes, durante y después de ${base}`,
+                `Comunica resultados y hallazgos derivados de ${base}`,
+                `Recibe retroalimentación e incorpora mejoras al realizar ${base}`
+            ];
+            const list = document.getElementById('checklistItemsList');
+            list.innerHTML = '';
+            suggestions.forEach(text => createListItem('checklistItemsList', 'Ítem verificable', text));
+            alert('✨ Lista sugerida. Ajusta los ítems antes de generar la vista previa.');
+        }
+
+        function buildChecklistData() {
+            const actividad = document.getElementById('checklistActividad').value.trim();
+            const items = collectListValues('checklistItemsList');
+            if (!actividad) {
+                alert('Describe la actividad o producto que evaluarás.');
+                return null;
+            }
+            if (items.length < 5) {
+                alert('Agrega al menos 5 ítems para la lista de cotejo.');
+                return null;
+            }
+            return { actividad, items };
+        }
+
+        function previewChecklist() {
+            const data = buildChecklistData();
+            if (!data) return;
+            const table = document.getElementById('checklistTable');
+            const header = '<tr><th>#</th><th>Ítem a verificar</th><th>Cumple (Sí/No)</th><th>Observaciones</th></tr>';
+            const body = data.items
+                .map((item, index) => `<tr><td>${index + 1}</td><td>${item}</td><td>⬜ Sí / ⬜ No</td><td></td></tr>`)
+                .join('');
+            table.innerHTML = `<thead>${header}</thead><tbody>${body}</tbody>`;
+            document.getElementById('checklistPreview').style.display = 'block';
+            generatedInstruments.checklist = data;
+            updateInstrumentStatus('checklist', true);
+        }
+
+        function buildChecklistText(data) {
+            let text = `LISTA DE COTEJO\nActividad: ${data.actividad}`;
+            data.items.forEach((item, index) => {
+                text += `\n${index + 1}. ${item} [ ] Sí  [ ] No`;
+            });
+            return text;
+        }
+
+        function buildChecklistHTML(data) {
+            const header = '<tr><th>#</th><th>Ítem a verificar</th><th>Cumple (Sí/No)</th><th>Observaciones</th></tr>';
+            const body = data.items
+                .map((item, index) => `<tr><td>${index + 1}</td><td>${item}</td><td>⬜ Sí / ⬜ No</td><td></td></tr>`)
+                .join('');
+            const table = `<table border="1" cellpadding="10" cellspacing="0" style="width:100%; border-collapse:collapse;"><thead>${header}</thead><tbody>${body}</tbody></table>`;
+            const content = `<h1>Lista de Cotejo</h1><p><strong>Actividad:</strong> ${data.actividad}</p>${table}`;
+            return wrapHTMLDocument('Lista de Cotejo', content);
+        }
+
+        function copyChecklistText() {
+            if (!generatedInstruments.checklist) {
+                alert('Primero genera la vista previa de la lista de cotejo.');
+                return;
+            }
+            copyTextToClipboard(buildChecklistText(generatedInstruments.checklist), '✅ Lista de cotejo copiada');
+        }
+
+        function exportChecklistHTML() {
+            if (!generatedInstruments.checklist) {
+                alert('Primero genera la vista previa de la lista de cotejo.');
+                return;
+            }
+            downloadFile('lista-cotejo.html', buildChecklistHTML(generatedInstruments.checklist));
+        }
+
+        function generateMatrixAI() {
+            const competencia = document.getElementById('matrixCompetencia').value.trim() || 'la competencia seleccionada';
+            const criteriaSuggestions = [
+                `Dominio conceptual de ${competencia.toLowerCase()}`,
+                `Aplicación procedimental en ${competencia.toLowerCase()}`,
+                `Gestión de recursos y tiempos durante ${competencia.toLowerCase()}`,
+                `Evidencia y documentación de ${competencia.toLowerCase()}`
+            ];
+            const levelSuggestions = ['Crítico', 'Básico', 'Alto', 'Superior'];
+            const criteriaList = document.getElementById('matrixCriteriaList');
+            criteriaList.innerHTML = '';
+            criteriaSuggestions.forEach(text => createListItem('matrixCriteriaList', 'Criterio de evaluación', text));
+            const levelsList = document.getElementById('matrixLevelsList');
+            levelsList.innerHTML = '';
+            levelSuggestions.forEach(text => createListItem('matrixLevelsList', 'Nivel de logro', text));
+            alert('✨ Matriz sugerida. Ajusta criterios y niveles antes de obtener la vista previa.');
+        }
+
+        function buildMatrixData() {
+            const competencia = document.getElementById('matrixCompetencia').value.trim();
+            const criteria = collectListValues('matrixCriteriaList');
+            const levels = collectListValues('matrixLevelsList');
+            if (!competencia) {
+                alert('Describe la competencia a evaluar en la matriz.');
+                return null;
+            }
+            if (criteria.length < 3) {
+                alert('Incluye al menos 3 criterios en la matriz.');
+                return null;
+            }
+            if (levels.length < 3) {
+                alert('Incluye al menos 3 niveles de desempeño.');
+                return null;
+            }
+            const descriptors = criteria.map(criterion =>
+                levels.map((level, index) => createMatrixDescriptor(criterion, level, index))
+            );
+            return { competencia, criteria, levels, descriptors };
+        }
+
+        function createMatrixDescriptor(criterion, level, index) {
+            const nuances = [
+                'requiere acompañamiento para cumplir el criterio',
+                'demuestra avances parciales con apoyo puntual',
+                'cumple con los estándares establecidos',
+                'supera las expectativas y aporta mejoras'
+            ];
+            const nuance = nuances[index] || nuances[nuances.length - 1];
+            return `${level}: ${criterion.toLowerCase()} ${nuance}.`;
+        }
+
+        function previewMatrix() {
+            const data = buildMatrixData();
+            if (!data) return;
+            const header = '<tr><th>Criterio</th>' + data.levels.map(level => `<th>${level}</th>`).join('') + '</tr>';
+            const body = data.criteria
+                .map((criterion, rowIndex) => {
+                    const cells = data.descriptors[rowIndex].map(desc => `<td>${desc}</td>`).join('');
+                    return `<tr><td>${criterion}</td>${cells}</tr>`;
+                })
+                .join('');
+            document.getElementById('matrixTable').innerHTML = `<thead>${header}</thead><tbody>${body}</tbody>`;
+            document.getElementById('matrixPreview').style.display = 'block';
+            generatedInstruments.matrix = data;
+            updateInstrumentStatus('matrix', true);
+        }
+
+        function buildMatrixText(data) {
+            let text = `MATRIZ DE EVALUACIÓN\nCompetencia: ${data.competencia}\nNiveles: ${data.levels.join(' | ')}`;
+            data.criteria.forEach((criterion, index) => {
+                text += `\n\n${criterion}`;
+                data.levels.forEach((level, levelIndex) => {
+                    text += `\n- ${level}: ${data.descriptors[index][levelIndex]}`;
+                });
+            });
+            return text;
+        }
+
+        function buildMatrixHTML(data) {
+            const header = '<tr><th>Criterio</th>' + data.levels.map(level => `<th>${level}</th>`).join('') + '</tr>';
+            const body = data.criteria
+                .map((criterion, rowIndex) => {
+                    const cells = data.descriptors[rowIndex].map(desc => `<td>${desc}</td>`).join('');
+                    return `<tr><td>${criterion}</td>${cells}</tr>`;
+                })
+                .join('');
+            const table = `<table border="1" cellpadding="10" cellspacing="0" style="width:100%; border-collapse:collapse;"><thead>${header}</thead><tbody>${body}</tbody></table>`;
+            const content = `<h1>Matriz de Evaluación</h1><p><strong>Competencia:</strong> ${data.competencia}</p>${table}`;
+            return wrapHTMLDocument('Matriz de Evaluación', content);
+        }
+
+        function copyMatrixText() {
+            if (!generatedInstruments.matrix) {
+                alert('Primero genera la vista previa de la matriz.');
+                return;
+            }
+            copyTextToClipboard(buildMatrixText(generatedInstruments.matrix), '✅ Matriz copiada al portapapeles');
+        }
+
+        function exportMatrixHTML() {
+            if (!generatedInstruments.matrix) {
+                alert('Primero genera la vista previa de la matriz.');
+                return;
+            }
+            downloadFile('matriz-evaluacion.html', buildMatrixHTML(generatedInstruments.matrix));
+        }
+
+        function wrapHTMLDocument(title, bodyContent) {
+            const head = [
+                '<!DOCTYPE html>',
+                '<html lang="es">',
+                '<head>',
+                '<meta charset="UTF-8">',
+                `<title>${title}</title>`,
+                '<style>',
+                'body{font-family:Inter,Arial,sans-serif;padding:2rem;background:#f8f9fb;color:#2d3436;}',
+                'h1{color:#e67e22;}',
+                'table{border-collapse:collapse;margin-top:1.5rem;width:100%;}',
+                'th{background:#e67e22;color:#fff;}',
+                'td,th{border:1px solid #ddd;padding:0.75rem;text-align:left;}',
+                '</style>',
+                '</head>',
+                '<body>'
+            ].join('');
+            return `${head}${bodyContent}</body></html>`;
+        }
+
+        function copyTextToClipboard(text, successMessage) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert(successMessage);
+                });
+            } else {
+                const temp = document.createElement('textarea');
+                temp.value = text;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                alert(successMessage);
+            }
+        }
+
+        function downloadFile(filename, content) {
+            const blob = new Blob([content], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            alert('📁 Archivo descargado correctamente');
+        }
+
+        function getSelectedInstruments() {
+            return ['rubric', 'checklist', 'matrix']
+                .filter(type => includeCheckboxes[type] && includeCheckboxes[type].checked && generatedInstruments[type]);
+        }
+
+        function copyCombinedToolkit() {
+            const selected = getSelectedInstruments();
+            if (selected.length === 0) {
+                alert('Selecciona al menos un instrumento para copiar.');
+                return;
+            }
+            const sections = selected.map(type => {
+                if (type === 'rubric') return buildRubricText(generatedInstruments.rubric);
+                if (type === 'checklist') return buildChecklistText(generatedInstruments.checklist);
+                return buildMatrixText(generatedInstruments.matrix);
+            });
+            copyTextToClipboard(sections.join('\n\n==============================\n\n'), '✅ Toolkit combinado copiado');
+            generatedInstruments.bundleReady = true;
+            updateToolkitReadiness();
+        }
+
+        function exportCombinedHTML() {
+            const selected = getSelectedInstruments();
+            if (selected.length === 0) {
+                alert('Selecciona al menos un instrumento para exportar.');
+                return;
+            }
+            const sections = selected
+                .map(type => {
+                    if (type === 'rubric') {
+                        return `<section><h2>Rúbrica Analítica</h2>${generateRubricSectionHTML(generatedInstruments.rubric)}</section>`;
+                    }
+                    if (type === 'checklist') {
+                        return `<section><h2>Lista de Cotejo</h2>${generateChecklistSectionHTML(generatedInstruments.checklist)}</section>`;
+                    }
+                    return `<section><h2>Matriz de Evaluación</h2>${generateMatrixSectionHTML(generatedInstruments.matrix)}</section>`;
+                })
+                .join('');
+            const head = [
+                '<!DOCTYPE html>',
+                '<html lang="es">',
+                '<head>',
+                '<meta charset="UTF-8">',
+                '<title>Toolkit de Evaluación</title>',
+                '<style>',
+                'body{font-family:Inter,Arial,sans-serif;padding:2rem;background:#f4f6fb;color:#1f2933;}',
+                'h1{color:#e67e22;}',
+                'h2{color:#764ba2;margin-top:2rem;}',
+                'table{width:100%;border-collapse:collapse;margin-top:1rem;}',
+                'th,td{border:1px solid #d1d5db;padding:0.75rem;text-align:left;}',
+                'th{background:#e67e22;color:white;}',
+                'section{margin-bottom:2rem;padding-bottom:2rem;border-bottom:2px solid #e5e7eb;}',
+                '</style>',
+                '</head>',
+                '<body>',
+                '<h1>Toolkit del Forjador</h1>'
+            ].join('');
+            const html = `${head}${sections}</body></html>`;
+            downloadFile('toolkit-forjador.html', html);
+            generatedInstruments.bundleReady = true;
+            updateToolkitReadiness();
+        }
+
+        function generateRubricSectionHTML(data) {
+            const table = generateRubricTableHTML(data);
+            return `<p><strong>Competencia:</strong> ${data.competencia}</p><table>${table}</table>`;
+        }
+
+        function generateChecklistSectionHTML(data) {
+            const header = '<tr><th>#</th><th>Ítem a verificar</th><th>Cumple</th><th>Observaciones</th></tr>';
+            const body = data.items
+                .map((item, index) => `<tr><td>${index + 1}</td><td>${item}</td><td>⬜ Sí / ⬜ No</td><td></td></tr>`)
+                .join('');
+            return `<p><strong>Actividad:</strong> ${data.actividad}</p><table><thead>${header}</thead><tbody>${body}</tbody></table>`;
+        }
+
+        function generateMatrixSectionHTML(data) {
+            const header = '<tr><th>Criterio</th>' + data.levels.map(level => `<th>${level}</th>`).join('') + '</tr>';
+            const body = data.criteria
+                .map((criterion, rowIndex) => {
+                    const cells = data.descriptors[rowIndex].map(desc => `<td>${desc}</td>`).join('');
+                    return `<tr><td>${criterion}</td>${cells}</tr>`;
+                })
+                .join('');
+            return `<p><strong>Competencia:</strong> ${data.competencia}</p><table><thead>${header}</thead><tbody>${body}</tbody></table>`;
+        }
+
+        function updateToolkitReadiness() {
+            const toolkitStatus = document.getElementById('toolkitStatus');
+            const bundleNotice = document.getElementById('bundleNotice');
+            if (!toolkitStatus) return;
+            const hasRubric = Boolean(generatedInstruments.rubric);
+            const hasChecklist = Boolean(generatedInstruments.checklist);
+            const hasMatrix = Boolean(generatedInstruments.matrix);
+            const allReady = hasRubric && hasChecklist && hasMatrix;
+            if (generatedInstruments.bundleReady && allReady) {
+                toolkitStatus.textContent = 'Toolkit listo y exportado';
+                toolkitStatus.classList.add('completed');
+                if (bundleNotice) {
+                    bundleNotice.textContent = 'Toolkit integrado listo para compartir o subir a tu LMS.';
+                }
+            } else if (allReady) {
+                toolkitStatus.textContent = 'Genera la exportación múltiple para finalizar';
+                toolkitStatus.classList.remove('completed');
+                if (bundleNotice) {
+                    bundleNotice.textContent = 'Utiliza la exportación múltiple para consolidar tus instrumentos.';
+                }
+            } else {
+                toolkitStatus.textContent = 'Genera los tres instrumentos con IA';
+                toolkitStatus.classList.remove('completed');
+                if (bundleNotice) {
+                    bundleNotice.textContent = 'Aún faltan instrumentos por construir antes de consolidar el toolkit.';
+                }
+            }
+        }
+
+        function finalizeToolkit() {
+            if (localStorage.getItem('odisea-station7-completed') === 'true') {
+                document.getElementById('successModal').classList.add('active');
+                return;
+            }
+            const allReady = generatedInstruments.rubric && generatedInstruments.checklist && generatedInstruments.matrix;
+            if (!allReady) {
+                alert('Genera los tres instrumentos antes de marcar el toolkit como completado.');
+                return;
+            }
+            if (!generatedInstruments.bundleReady) {
+                alert('Utiliza la exportación múltiple para consolidar tu toolkit antes de completarlo.');
+                return;
+            }
+            document.getElementById('successModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+
+        function claimRewards() {
+            localStorage.setItem('odisea-station7-completed', 'true');
+            if (window.odiseaProgress) {
+                window.odiseaProgress.completeStation(7);
+                window.odiseaProgress.earnBadge(7);
+            } else {
+                const progress = JSON.parse(localStorage.getItem('odisea-progress') || '{"stations":{},"badges":{}}');
+                progress.stations[7] = true;
+                progress.badges[7] = true;
+                localStorage.setItem('odisea-progress', JSON.stringify(progress));
+            }
+            closeModal();
+            updateCompletionBadge();
+            alert('🎉 Progreso registrado. ¡Tu insignia ya es visible en el mapa!');
+        }
+
+        document.getElementById('successModal').addEventListener('click', event => {
+            if (event.target.id === 'successModal') {
+                closeModal();
+            }
+        });
+
+        function updateCompletionBadge() {
+            const completed = localStorage.getItem('odisea-station7-completed') === 'true';
+            const header = document.querySelector('.station-header');
+            let badge = document.getElementById('station7Completion');
+            if (completed && header) {
+                if (!badge) {
+                    badge = document.createElement('div');
+                    badge.id = 'station7Completion';
+                    badge.style.cssText = 'display:inline-block;padding:0.5rem 1rem;background:var(--success);color:white;border-radius:20px;font-size:0.9rem;margin-top:1rem;';
+                    badge.innerHTML = '<i class="bi bi-check-circle-fill"></i> Ya completaste esta estación';
+                    header.appendChild(badge);
+                }
+                const toolkitStatus = document.getElementById('toolkitStatus');
+                if (toolkitStatus) {
+                    toolkitStatus.textContent = 'Toolkit entregado';
+                    toolkitStatus.classList.add('completed');
+                }
+            }
+        }
+
+        updateInstrumentStatus('rubric', false);
+        updateInstrumentStatus('checklist', false);
+        updateInstrumentStatus('matrix', false);
+        updateToolkitReadiness();
+        updateCompletionBadge();
+    </script>
+
+</body>
+</html>
