@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estación 5: Taller de Agentes - Odisea IA</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4facfe;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark-bg: #0f0c29;
+            --dark-card: #1a1640;
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --text-dark: #ffffff;
+            --text-light: #2d3436;
+            --glow: rgba(102, 126, 234, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+        }
+
+        body[data-theme="dark"] {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #2d1b69 100%);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] {
+            background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 100%);
+            color: var(--text-light);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        body[data-theme="dark"] .nav-bar {
+            background: rgba(15, 12, 41, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .nav-bar {
+            background: rgba(248, 249, 250, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-5px);
+            color: white;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px var(--glow);
+        }
+
+        .theme-toggle i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Header */
+        .station-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .station-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .station-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #1abc9c, var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .station-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            border: 2px solid;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        body[data-theme="dark"] .tab-btn {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] .tab-btn {
+            border-color: rgba(0, 0, 0, 0.2);
+            color: var(--text-light);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--glow);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Platform Card */
+        .platform-card {
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        body[data-theme="dark"] .platform-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .platform-card {
+            background: var(--light-card);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .platform-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .platform-icon {
+            font-size: 4rem;
+        }
+
+        .platform-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+        }
+
+        .platform-description {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .use-case {
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        body[data-theme="dark"] .use-case {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body[data-theme="light"] .use-case {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .use-case h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .use-case-content {
+            margin: 1rem 0;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .feature-list li {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        body[data-theme="dark"] .feature-list li {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        body[data-theme="light"] .feature-list li {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .feature-list li i {
+            color: var(--success);
+            margin-top: 0.2rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px var(--glow);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Project Section */
+        .project-container {
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+            border: 2px solid var(--success);
+        }
+
+        body[data-theme="dark"] .project-container {
+            background: rgba(74, 172, 254, 0.05);
+        }
+
+        body[data-theme="light"] .project-container {
+            background: rgba(74, 172, 254, 0.05);
+        }
+
+        .project-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .project-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .project-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .step-card {
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            position: relative;
+            padding-left: 5rem;
+        }
+
+        body[data-theme="dark"] .step-card {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body[data-theme="light"] .step-card {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .step-number {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--success), var(--primary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .step-content {
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+
+        .template-box {
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        body[data-theme="dark"] .template-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .template-box {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0;
+        }
+
+        .checklist li {
+            padding: 1rem;
+            margin: 0.75rem 0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        body[data-theme="dark"] .checklist li {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body[data-theme="light"] .checklist li {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .checklist li input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .checklist li.checked {
+            background: rgba(74, 172, 254, 0.2);
+            border-left: 4px solid var(--success);
+        }
+
+        /* Complete Button */
+        .complete-section {
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .btn-complete {
+            padding: 1.5rem 3rem;
+            background: linear-gradient(135deg, var(--success), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-complete:hover:not(:disabled) {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px var(--glow);
+        }
+
+        .btn-complete:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Success Modal */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .success-modal.active {
+            display: flex;
+        }
+
+        .success-content {
+            max-width: 500px;
+            width: 90%;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        body[data-theme="dark"] .success-content {
+            background: var(--dark-card);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .success-content {
+            background: var(--light-card);
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .success-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .badge-earned {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--success), var(--primary));
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            margin: 1.5rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .tabs-container {
+                gap: 0.5rem;
+            }
+
+            .tab-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .platform-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-action {
+                min-width: 100%;
+            }
+
+            .step-card {
+                padding-left: 1.5rem;
+                padding-top: 4rem;
+            }
+
+            .step-number {
+                left: 50%;
+                top: 1.5rem;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-content">
+            <a href="../index.html" class="back-btn">
+                <i class="bi bi-arrow-left"></i>
+                Volver al Mapa
+            </a>
+            <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                <i class="bi bi-sun-fill"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <header class="station-header">
+            <div class="station-icon">🤖</div>
+            <h1 class="station-title">Taller de Agentes</h1>
+            <p class="station-subtitle">
+                Descubre GPTs, Gems, Copilot y Grok: crea asistentes personalizados que automatizan tu trabajo docente
+            </p>
+        </header>
+
+        <!-- Main Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="gpts">
+                <i class="bi bi-robot"></i> GPTs
+            </button>
+            <button class="tab-btn" data-tab="gems">
+                <i class="bi bi-gem"></i> Gems
+            </button>
+            <button class="tab-btn" data-tab="copilot">
+                <i class="bi bi-microsoft"></i> Copilot
+            </button>
+            <button class="tab-btn" data-tab="grok">
+                <i class="bi bi-twitter-x"></i> Grok
+            </button>
+            <button class="tab-btn" data-tab="project">
+                <i class="bi bi-hammer"></i> Proyecto
+            </button>
+        </div>
+
+        <!-- Tab: GPTs -->
+        <div id="gpts" class="tab-content active">
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon">🤖</div>
+                    <div>
+                        <h2 class="platform-title">GPTs de OpenAI</h2>
+                        <p style="opacity: 0.7; font-size: 1rem;">Versiones personalizadas de ChatGPT</p>
+                    </div>
+                </div>
+
+                <p class="platform-description">
+                    Los GPTs son versiones especializadas de ChatGPT que puedes crear sin programar. Defines su personalidad, conocimiento y comportamiento para tareas específicas de tu formación.
+                </p>
+
+                <div class="use-case">
+                    <h4>💼 Caso de Uso SENA: Asesor de Resultados de Aprendizaje</h4>
+                    <div class="use-case-content">
+                        <p><strong>Objetivo:</strong> Un GPT que ayude a diseñar y evaluar resultados de aprendizaje según metodología SENA.</p>
+                        
+                        <p style="margin-top: 1.5rem;"><strong>Funcionalidades:</strong></p>
+                        <ul class="feature-list">
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Genera resultados de aprendizaje redactados con verbos de Bloom</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Valida si un RA cumple con criterios de claridad, medición y alcance</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Sugiere actividades y criterios de evaluación alineados</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Conoce la estructura de diseños curriculares SENA</span>
+                            </li>
+                        </ul>
+
+                        <p style="margin-top: 1.5rem;"><strong>Datos que subirías:</strong> Documentos de diseño curricular, formatos de resultados de aprendizaje, guías metodológicas SENA.</p>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="https://help.openai.com/en/articles/8554397-creating-a-gpt" target="_blank" class="btn-action btn-secondary">
+                        <i class="bi bi-book"></i>
+                        Tutorial Oficial
+                    </a>
+                    <a href="https://chat.openai.com/gpts/editor" target="_blank" class="btn-action btn-primary">
+                        <i class="bi bi-plus-circle"></i>
+                        Crear mi GPT
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Gems -->
+        <div id="gems" class="tab-content">
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon">💎</div>
+                    <div>
+                        <h2 class="platform-title">Gems de Google</h2>
+                        <p style="opacity: 0.7; font-size: 1rem;">Asistentes personalizados en Gemini</p>
+                    </div>
+                </div>
+
+                <p class="platform-description">
+                    Los Gems son versiones especializadas de Gemini. Perfectos para tareas repetitivas donde necesitas que la IA siga siempre las mismas instrucciones y estilo.
+                </p>
+
+                <div class="use-case">
+                    <h4>💼 Caso de Uso SENA: Generador de Actividades por Competencia</h4>
+                    <div class="use-case-content">
+                        <p><strong>Objetivo:</strong> Un Gem que genera actividades didácticas adaptadas al nivel de la competencia y sector productivo.</p>
+                        
+                        <p style="margin-top: 1.5rem;"><strong>Funcionalidades:</strong></p>
+                        <ul class="feature-list">
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Le das la competencia y genera 3 actividades prácticas</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Adapta el lenguaje técnico al sector (agropecuario, industrial, servicios)</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Incluye materiales necesarios y tiempo estimado</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Formato listo para copiar en guía de aprendizaje</span>
+                            </li>
+                        </ul>
+
+                        <p style="margin-top: 1.5rem;"><strong>Instrucciones del Gem:</strong> "Eres un instructor SENA experto en diseño de actividades didácticas..."</p>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="https://support.google.com/gemini/answer/14730850" target="_blank" class="btn-action btn-secondary">
+                        <i class="bi bi-book"></i>
+                        Guía de Gems
+                    </a>
+                    <a href="https://gemini.google.com/gems/create" target="_blank" class="btn-action btn-primary">
+                        <i class="bi bi-plus-circle"></i>
+                        Crear mi Gem
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Copilot -->
+        <div id="copilot" class="tab-content">
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon">🧑‍✈️</div>
+                    <div>
+                        <h2 class="platform-title">Copilot de Microsoft</h2>
+                        <p style="opacity: 0.7; font-size: 1rem;">IA integrada en Office 365</p>
+                    </div>
+                </div>
+
+                <p class="platform-description">
+                    Copilot se integra directamente en Word, Excel, PowerPoint y Teams. Ideal si ya trabajas con Office y quieres automatizar tareas dentro de tus documentos.
+                </p>
+
+                <div class="use-case">
+                    <h4>💼 Caso de Uso SENA: Co-diseñador de Guías de Aprendizaje</h4>
+                    <div class="use-case-content">
+                        <p><strong>Objetivo:</strong> Usar Copilot para generar y estructurar guías de aprendizaje directamente en Word.</p>
+                        
+                        <p style="margin-top: 1.5rem;"><strong>Funcionalidades:</strong></p>
+                        <ul class="feature-list">
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Genera estructura completa de guía según plantilla SENA</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Redacta actividades de aprendizaje con instrucciones claras</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Crea tablas de criterios de evaluación</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Formato automático según estándares del centro</span>
+                            </li>
+                        </ul>
+
+                        <p style="margin-top: 1.5rem;"><strong>Requisito:</strong> Suscripción Microsoft 365 Copilot (pago). Alternativa gratuita: Copilot web.</p>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="https://support.microsoft.com/es-es/topic/bienvenida-a-copilot-en-word-2135e85f-a467-463b-b2f0-c51a46d625d1" target="_blank" class="btn-action btn-secondary">
+                        <i class="bi bi-book"></i>
+                        Guía Oficial
+                    </a>
+                    <a href="https://copilot.microsoft.com" target="_blank" class="btn-action btn-primary">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        Ir a Copilot
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Grok -->
+        <div id="grok" class="tab-content">
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon">🌐</div>
+                    <div>
+                        <h2 class="platform-title">Grok (xAI)</h2>
+                        <p style="opacity: 0.7; font-size: 1rem;">IA con acceso a tiempo real a X (Twitter)</p>
+                    </div>
+                </div>
+
+                <p class="platform-description">
+                    Grok tiene acceso directo a la red social X, lo que le permite analizar tendencias, opiniones y conversaciones en tiempo real. Perfecto para investigar lo que está pasando en tu sector.
+                </p>
+
+                <div class="use-case">
+                    <h4>💼 Caso de Uso SENA: Analista de Tendencias Sectoriales</h4>
+                    <div class="use-case-content">
+                        <p><strong>Objetivo:</strong> Mantener tu formación actualizada con las tendencias reales del sector productivo.</p>
+                        
+                        <p style="margin-top: 1.5rem;"><strong>Funcionalidades:</strong></p>
+                        <ul class="feature-list">
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Analiza conversaciones sobre tecnologías emergentes en tu sector</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Identifica empresas que están contratando perfiles de tus aprendices</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Detecta nuevas demandas del mercado laboral</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Genera ideas de proyectos formativos basadas en problemas reales</span>
+                            </li>
+                        </ul>
+
+                        <p style="margin-top: 1.5rem;"><strong>Ejemplo de uso:</strong> "Analiza qué están diciendo empresas del sector logístico en Colombia sobre automatización y dame 3 temas que debería incluir en mi formación".</p>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="https://x.ai" target="_blank" class="btn-action btn-secondary">
+                        <i class="bi bi-info-circle"></i>
+                        Más sobre Grok
+                    </a>
+                    <a href="https://x.ai/grok" target="_blank" class="btn-action btn-primary">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        Ir a Grok
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Project -->
+        <div id="project" class="tab-content">
+            <div class="project-container">
+                <div class="project-header">
+                    <h2 class="project-title">🛠️ Proyecto Práctico: Crea tu Primer Gem</h2>
+                    <p class="project-subtitle">
+                        Sigue estos pasos para crear un Gem que genere rúbricas de evaluación personalizadas
+                    </p>
+                </div>
+
+                <!-- Step 1 -->
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Accede a Gem Manager</h3>
+                    <div class="step-content">
+                        <p>Ve a <a href="https://gemini.google.com" target="_blank" style="color: var(--primary); font-weight: 600;">gemini.google.com</a> e inicia sesión con tu cuenta de Google.</p>
+                        <p style="margin-top: 0.5rem;">Busca el ícono de <strong>Gem Manager</strong> en la barra lateral izquierda (parece un diamante 💎) y haz clic en <strong>"Nuevo Gem"</strong>.</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Define el Nombre y Descripción</h3>
+                    <div class="step-content">
+                        <p><strong>Nombre:</strong> "Generador de Rúbricas SENA"</p>
+                        <p style="margin-top: 0.5rem;"><strong>Descripción:</strong> "Crea rúbricas de evaluación técnica adaptadas a la formación SENA"</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Escribe las Instrucciones del Gem</h3>
+                    <div class="step-content">
+                        <p>Copia y pega estas instrucciones en el campo "Instrucciones":</p>
+                        <div class="template-box">Eres un instructor SENA experto en evaluación de competencias técnicas.
+
+Tu tarea es generar rúbricas de evaluación claras y aplicables.
+
+Cuando te den una competencia o actividad, debes:
+
+1. Identificar 4-5 criterios clave a evaluar
+2. Definir 3 niveles de desempeño para cada criterio:
+   - Insuficiente (1-2 puntos)
+   - Aceptable (3-4 puntos)
+   - Excelente (5 puntos)
+3. Describir claramente qué debe demostrar el aprendiz en cada nivel
+4. Presentar todo en formato de tabla
+
+Usa lenguaje técnico pero comprensible.
+Adapta los criterios al sector productivo del aprendiz (agro, industria, servicios, TIC).
+Incluye criterios tanto técnicos como actitudinales (trabajo en equipo, seguridad).</div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Prueba tu Gem</h3>
+                    <div class="step-content">
+                        <p>Haz clic en <strong>"Probar Gem"</strong> y escribe un prompt de prueba como:</p>
+                        <div class="template-box">"Genera una rúbrica para evaluar la competencia 'Aplicar técnicas de soldadura SMAW en posición plana' en el programa Técnico en Soldadura"</div>
+                        <p style="margin-top: 1rem;">Verifica que el Gem genere una rúbrica completa, estructurada y útil.</p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="step-title">Guarda y Usa tu Gem</h3>
+                    <div class="step-content">
+                        <p>Si estás satisfecho con los resultados, haz clic en <strong>"Guardar"</strong>.</p>
+                        <p style="margin-top: 0.5rem;">Ahora tu Gem aparecerá en la lista de Gems disponibles. Cada vez que necesites una rúbrica, selecciona este Gem y describe la competencia.</p>
+                        <p style="margin-top: 1rem; padding: 1rem; border-radius: 8px; background: rgba(74, 172, 254, 0.1);"><strong>💡 Tip:</strong> Puedes crear múltiples Gems para diferentes tareas: uno para planes de sesión, otro para actividades prácticas, otro para proyectos formativos, etc.</p>
+                    </div>
+                </div>
+
+                <!-- Checklist -->
+                <h3 style="font-size: 1.8rem; font-weight: 700; margin: 3rem 0 1.5rem 0; text-align: center;">
+                    ✅ Checklist de Completado
+                </h3>
+
+                <ul class="checklist">
+                    <li>
+                        <input type="checkbox" id="check-1">
+                        <label for="check-1">Accedí a Gemini y encontré el Gem Manager</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="check-2">
+                        <label for="check-2">Creé un nuevo Gem con nombre y descripción</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="check-3">
+                        <label for="check-3">Copié las instrucciones en el campo correspondiente</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="check-4">
+                        <label for="check-4">Probé el Gem con un prompt de ejemplo</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="check-5">
+                        <label for="check-5">El Gem generó una rúbrica completa y útil</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="check-6">
+                        <label for="check-6">Guardé el Gem exitosamente</label>
+                    </li>
+                </ul>
+
+                <div style="text-align: center; margin-top: 3rem;">
+                    <button class="btn-action btn-primary" id="validateProjectBtn" disabled style="max-width: 400px; margin: 0 auto;">
+                        <i class="bi bi-check-circle"></i>
+                        He Completado mi Gem
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Complete Section -->
+        <div class="complete-section">
+            <button class="btn-complete" id="completeBtn" disabled>
+                <i class="bi bi-check-circle-fill"></i>
+                Completar Estación
+            </button>
+            <p style="margin-top: 1rem; opacity: 0.7;">
+                <i class="bi bi-info-circle"></i> Completa el proyecto práctico para desbloquear
+            </p>
+        </div>
+
+    </main>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">🤖</div>
+            <h2 class="success-title">¡Estación Completada!</h2>
+            <div class="badge-earned">
+                <i class="bi bi-award-fill"></i>
+                Insignia "Creador de Agentes" Obtenida
+            </div>
+            <p style="opacity: 0.8; margin-bottom: 2rem;">
+                Has creado tu primer agente IA personalizado. ¡La siguiente estación está desbloqueada!
+            </p>
+            <button class="btn-complete" onclick="window.location.href='../index.html'">
+                <i class="bi bi-map"></i>
+                Volver al Mapa
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const bodyElement = document.body;
+        
+        const savedTheme = localStorage.getItem('odisea-theme') || 'dark';
+        bodyElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = bodyElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            bodyElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('odisea-theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+        
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'bi bi-sun-fill';
+            } else {
+                icon.className = 'bi bi-moon-stars-fill';
+            }
+        }
+
+        // Main Tabs
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const targetTab = btn.dataset.tab;
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === targetTab) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Checklist Validation
+        const checkboxes = document.querySelectorAll('.checklist input[type="checkbox"]');
+        const validateBtn = document.getElementById('validateProjectBtn');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const li = checkbox.closest('li');
+                if (checkbox.checked) {
+                    li.classList.add('checked');
+                } else {
+                    li.classList.remove('checked');
+                }
+                validateProject();
+            });
+        });
+
+        function validateProject() {
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            validateBtn.disabled = !allChecked;
+        }
+
+        // Complete Project
+        validateBtn.addEventListener('click', () => {
+            localStorage.setItem('odisea-station5-project-completed', 'true');
+            
+            // Show success message
+            validateBtn.innerHTML = '<i class="bi bi-check2-circle"></i> ¡Proyecto Completado!';
+            validateBtn.style.background = 'var(--success)';
+            
+            // Enable complete station button
+            document.getElementById('completeBtn').disabled = false;
+            
+            // Scroll to complete button
+            setTimeout(() => {
+                document.querySelector('.complete-section').scrollIntoView({ behavior: 'smooth' });
+            }, 1000);
+        });
+
+        // Complete Station
+        document.getElementById('completeBtn').addEventListener('click', () => {
+            localStorage.setItem('odisea-station5-completed', 'true');
+            
+            // Update progress
+            if (window.odiseaProgress) {
+                window.odiseaProgress.completeStation(5);
+                window.odiseaProgress.earnBadge(5);
+            } else {
+                const progress = JSON.parse(localStorage.getItem('odisea-progress') || '{"stations":{},"badges":{}}');
+                progress.stations[5] = true;
+                progress.badges[5] = true;
+                localStorage.setItem('odisea-progress', JSON.stringify(progress));
+            }
+
+            // Show success modal
+            document.getElementById('successModal').classList.add('active');
+        });
+
+        // Load saved progress
+        if (localStorage.getItem('odisea-station5-project-completed') === 'true') {
+            checkboxes.forEach(cb => {
+                cb.checked = true;
+                cb.closest('li').classList.add('checked');
+            });
+            validateProject();
+            validateBtn.innerHTML = '<i class="bi bi-check2-circle"></i> ¡Proyecto Completado!';
+            validateBtn.style.background = 'var(--success)';
+            document.getElementById('completeBtn').disabled = false;
+        }
+
+        // Check if already completed
+        if (localStorage.getItem('odisea-station5-completed') === 'true') {
+            const header = document.querySelector('.station-header');
+            const badge = document.createElement('div');
+            badge.style.cssText = 'display: inline-block; padding: 0.5rem 1rem; background: var(--success); color: white; border-radius: 20px; font-size: 0.9rem; margin-top: 1rem;';
+            badge.innerHTML = '<i class="bi bi-check-circle-fill"></i> Ya completaste esta estación';
+            header.appendChild(badge);
+        }
+    </script>
+
+</body>
+</html>

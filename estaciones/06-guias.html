@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estación 6: Taxonomía en Acción - Odisea IA</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4facfe;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --bloom-1: #e74c3c;
+            --bloom-2: #e67e22;
+            --bloom-3: #f39c12;
+            --bloom-4: #2ecc71;
+            --bloom-5: #3498db;
+            --bloom-6: #9b59b6;
+            --dark-bg: #0f0c29;
+            --dark-card: #1a1640;
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --text-dark: #ffffff;
+            --text-light: #2d3436;
+            --glow: rgba(102, 126, 234, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+        }
+
+        body[data-theme="dark"] {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #2d1b69 100%);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] {
+            background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 100%);
+            color: var(--text-light);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        body[data-theme="dark"] .nav-bar {
+            background: rgba(15, 12, 41, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .nav-bar {
+            background: rgba(248, 249, 250, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-5px);
+            color: white;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px var(--glow);
+        }
+
+        .theme-toggle i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Header */
+        .station-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .station-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .station-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #9b59b6, #3498db, #2ecc71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .station-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Bloom Pyramid */
+        .bloom-pyramid {
+            max-width: 800px;
+            margin: 3rem auto;
+            position: relative;
+        }
+
+        .bloom-level {
+            padding: 1.5rem;
+            margin: 0.5rem 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bloom-level::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: width 0.3s ease;
+        }
+
+        .bloom-level:hover::before {
+            width: 100%;
+        }
+
+        .bloom-level:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .level-1 { 
+            background: linear-gradient(135deg, var(--bloom-1), #c0392b);
+            width: 100%;
+        }
+        .level-2 { 
+            background: linear-gradient(135deg, var(--bloom-2), #d35400);
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .level-3 { 
+            background: linear-gradient(135deg, var(--bloom-3), #e67e22);
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .level-4 { 
+            background: linear-gradient(135deg, var(--bloom-4), #27ae60);
+            width: 70%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .level-5 { 
+            background: linear-gradient(135deg, var(--bloom-5), #2980b9);
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .level-6 { 
+            background: linear-gradient(135deg, var(--bloom-6), #8e44ad);
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bloom-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .level-number {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+        }
+
+        .level-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            flex: 1;
+            text-align: center;
+        }
+
+        .level-icon {
+            font-size: 1.5rem;
+        }
+
+        .level-details {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .level-details.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .verbs-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .verb-tag {
+            padding: 0.3rem 0.8rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            border: 2px solid;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        body[data-theme="dark"] .tab-btn {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] .tab-btn {
+            border-color: rgba(0, 0, 0, 0.2);
+            color: var(--text-light);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--glow);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Generator Section */
+        .generator-container {
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        body[data-theme="dark"] .generator-container {
+            background: var(--dark-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .generator-container {
+            background: var(--light-card);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-circle {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            transform: scale(1.2);
+        }
+
+        .step.completed .step-circle {
+            background: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        .step.active .step-label {
+            opacity: 1;
+            font-weight: 600;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-group {
+            margin: 2rem 0;
+        }
+
+        .form-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        body[data-theme="dark"] .form-input,
+        body[data-theme="dark"] .form-textarea,
+        body[data-theme="dark"] .form-select {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] .form-input,
+        body[data-theme="light"] .form-textarea,
+        body[data-theme="light"] .form-select {
+            background: white;
+            border-color: rgba(0, 0, 0, 0.1);
+            color: var(--text-light);
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--glow);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .suggestion-box {
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        body[data-theme="dark"] .suggestion-box {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        body[data-theme="light"] .suggestion-box {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .suggestion-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: space-between;
+        }
+
+        .btn-action {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px var(--glow);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Preview Section */
+        .preview-container {
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        body[data-theme="dark"] .preview-container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .preview-container {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .preview-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .preview-section {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        body[data-theme="dark"] .preview-section {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body[data-theme="light"] .preview-section {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .preview-section h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Examples */
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .example-card {
+            padding: 2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        body[data-theme="dark"] .example-card {
+            background: var(--dark-card);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .example-card {
+            background: var(--light-card);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .example-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px var(--glow);
+        }
+
+        .example-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .example-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .example-description {
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        /* Success Modal */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .success-modal.active {
+            display: flex;
+        }
+
+        .success-content {
+            max-width: 500px;
+            width: 90%;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        body[data-theme="dark"] .success-content {
+            background: var(--dark-card);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .success-content {
+            background: var(--light-card);
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .success-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .badge-earned {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--success), var(--primary));
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            margin: 1.5rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .step-indicator {
+                flex-wrap: wrap;
+            }
+
+            .bloom-level {
+                width: 100% !important;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn-action {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-content">
+            <a href="../index.html" class="back-btn">
+                <i class="bi bi-arrow-left"></i>
+                Volver al Mapa
+            </a>
+            <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                <i class="bi bi-sun-fill"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <header class="station-header">
+            <div class="station-icon">📚</div>
+            <h1 class="station-title">Taxonomía en Acción</h1>
+            <p class="station-subtitle">
+                Aprende los 6 niveles de Bloom y crea guías de aprendizaje potenciadas por IA
+            </p>
+        </header>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="bloom">
+                <i class="bi bi-diagram-3"></i> Taxonomía de Bloom
+            </button>
+            <button class="tab-btn" data-tab="generator">
+                <i class="bi bi-magic"></i> Generador de Guías
+            </button>
+            <button class="tab-btn" data-tab="examples">
+                <i class="bi bi-lightbulb"></i> Ejemplos SENA
+            </button>
+        </div>
+
+        <!-- Tab: Bloom Pyramid -->
+        <div id="bloom" class="tab-content active">
+            <h2 style="text-align: center; margin-bottom: 2rem;">🔺 Pirámide de Bloom</h2>
+            <p style="text-align: center; opacity: 0.8; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                Click en cada nivel para ver su definición, verbos clave y ejemplos aplicados al SENA
+            </p>
+
+            <div class="bloom-pyramid">
+                
+                <!-- Nivel 6: Crear -->
+                <div class="bloom-level level-6" data-level="6">
+                    <div class="bloom-header">
+                        <div class="level-number">6</div>
+                        <div class="level-name">CREAR</div>
+                        <div class="level-icon"><i class="bi bi-stars"></i></div>
+                    </div>
+                    <div class="level-details">
+                        <p><strong>Definición:</strong> Producir trabajos originales, integrar conocimientos para generar nuevas soluciones.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Verbos clave:</strong></p>
+                        <div class="verbs-list">
+                            <span class="verb-tag">Diseñar</span>
+                            <span class="verb-tag">Construir</span>
+                            <span class="verb-tag">Planificar</span>
+                            <span class="verb-tag">Producir</span>
+                            <span class="verb-tag">Inventar</span>
+                            <span class="verb-tag">Desarrollar</span>
+                            <span class="verb-tag">Formular</span>
+                        </div>
+                        <p style="margin-top: 1rem;"><strong>Ejemplo SENA:</strong> "Diseñar un sistema de riego automatizado para cultivos de clima templado, integrando sensores IoT y paneles solares"</p>
+                    </div>
+                </div>
+
+                <!-- Nivel 5: Evaluar -->
+                <div class="bloom-level level-5" data-level="5">
+                    <div class="bloom-header">
+                        <div class="level-number">5</div>
+                        <div class="level-name">EVALUAR</div>
+                        <div class="level-icon"><i class="bi bi-clipboard-check"></i></div>
+                    </div>
+                    <div class="level-details">
+                        <p><strong>Definición:</strong> Emitir juicios basados en criterios y estándares, tomar decisiones fundamentadas.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Verbos clave:</strong></p>
+                        <div class="verbs-list">
+                            <span class="verb-tag">Evaluar</span>
+                            <span class="verb-tag">Criticar</span>
+                            <span class="verb-tag">Juzgar</span>
+                            <span class="verb-tag">Justificar</span>
+                            <span class="verb-tag">Argumentar</span>
+                            <span class="verb-tag">Defender</span>
+                            <span class="verb-tag">Validar</span>
+                        </div>
+                        <p style="margin-top: 1rem;"><strong>Ejemplo SENA:</strong> "Evaluar la viabilidad económica de tres propuestas de negocio, justificando cuál presenta mejor retorno de inversión"</p>
+                    </div>
+                </div>
+
+                <!-- Nivel 4: Analizar -->
+                <div class="bloom-level level-4" data-level="4">
+                    <div class="bloom-header">
+                        <div class="level-number">4</div>
+                        <div class="level-name">ANALIZAR</div>
+                        <div class="level-icon"><i class="bi bi-search"></i></div>
+                    </div>
+                    <div class="level-details">
+                        <p><strong>Definición:</strong> Descomponer información en partes, identificar relaciones y patrones.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Verbos clave:</strong></p>
+                        <div class="verbs-list">
+                            <span class="verb-tag">Analizar</span>
+                            <span class="verb-tag">Comparar</span>
+                            <span class="verb-tag">Contrastar</span>
+                            <span class="verb-tag">Diferenciar</span>
+                            <span class="verb-tag">Examinar</span>
+                            <span class="verb-tag">Investigar</span>
+                            <span class="verb-tag">Categorizar</span>
+                        </div>
+                        <p style="margin-top: 1rem;"><strong>Ejemplo SENA:</strong> "Analizar las causas de fallas en soldadura SMAW, identificando defectos por sobrecalentamiento vs contaminación"</p>
+                    </div>
+                </div>
+
+                <!-- Nivel 3: Aplicar -->
+                <div class="bloom-level level-3" data-level="3">
+                    <div class="bloom-header">
+                        <div class="level-number">3</div>
+                        <div class="level-name">APLICAR</div>
+                        <div class="level-icon"><i class="bi bi-gear"></i></div>
+                    </div>
+                    <div class="level-details">
+                        <p><strong>Definición:</strong> Usar el conocimiento en situaciones nuevas y concretas.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Verbos clave:</strong></p>
+                        <div class="verbs-list">
+                            <span class="verb-tag">Aplicar</span>
+                            <span class="verb-tag">Ejecutar</span>
+                            <span class="verb-tag">Implementar</span>
+                            <span class="verb-tag">Utilizar</span>
+                            <span class="verb-tag">Demostrar</span>
+                            <span class="verb-tag">Resolver</span>
+                            <span class="verb-tag">Operar</span>
+                        </div>
+                        <p style="margin-top: 1rem;"><strong>Ejemplo SENA:</strong> "Aplicar técnicas de primeros auxilios en una situación simulada de accidente laboral"</p>
+                    </div>
+                </div>
+
+                <!-- Nivel 2: Comprender -->
+                <div class="bloom-level level-2" data-level="2">
+                    <div class="bloom-header">
+                        <div class="level-number">2</div>
+                        <div class="level-name">COMPRENDER</div>
+                        <div class="level-icon"><i class="bi bi-lightbulb"></i></div>
+                    </div>
+                    <div class="level-details">
+                        <p><strong>Definición:</strong> Entender el significado, interpretar y explicar información.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Verbos clave:</strong></p>
+                        <div class="verbs-list">
+                            <span class="verb-tag">Explicar</span>
+                            <span class="verb-tag">Interpretar</span>
+                            <span class="verb-tag">Resumir</span>
+                            <span class="verb-tag">Clasificar</span>
+                            <span class="verb-tag">Describir</span>
+                            <span class="verb-tag">Parafrasear</span>
+                            <span class="verb-tag">Traducir</span>
+                        </div>
+                        <p style="margin-top: 1rem;"><strong>Ejemplo SENA:</strong> "Explicar el funcionamiento del ciclo de refrigeración, describiendo el rol de cada componente"</p>
+                    </div>
+                </div>
+
+                <!-- Nivel 1: Recordar -->
+                <div class="bloom-level level-1" data-level="1">
+                    <div class="bloom-header">
+                        <div class="level-number">1</div>
+                        <div class="level-name">RECORDAR</div>
+                        <div class="level-icon"><i class="bi bi-archive"></i></div>
+                    </div>
+                    <div class="level-details">
+                        <p><strong>Definición:</strong> Recuperar información relevante de la memoria.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Verbos clave:</strong></p>
+                        <div class="verbs-list">
+                            <span class="verb-tag">Listar</span>
+                            <span class="verb-tag">Nombrar</span>
+                            <span class="verb-tag">Identificar</span>
+                            <span class="verb-tag">Reconocer</span>
+                            <span class="verb-tag">Recordar</span>
+                            <span class="verb-tag">Definir</span>
+                            <span class="verb-tag">Enumerar</span>
+                        </div>
+                        <p style="margin-top: 1rem;"><strong>Ejemplo SENA:</strong> "Listar los 8 elementos del equipo de protección personal para trabajo en alturas"</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Tab: Generator -->
+        <div id="generator" class="tab-content">
+            <div class="generator-container">
+                <h2 style="text-align: center; margin-bottom: 3rem;">🛠️ Generador de Guías con IA</h2>
+
+                <!-- Step Indicator -->
+                <div class="step-indicator">
+                    <div class="step active" data-step="1">
+                        <div class="step-circle">1</div>
+                        <div class="step-label">Competencia</div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">Resultados</div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Actividades</div>
+                    </div>
+                    <div class="step" data-step="4">
+                        <div class="step-circle">4</div>
+                        <div class="step-label">Evaluación</div>
+                    </div>
+                    <div class="step" data-step="5">
+                        <div class="step-circle">5</div>
+                        <div class="step-label">Revisar</div>
+                    </div>
+                </div>
+
+                <!-- Form Steps -->
+                <form id="guideForm">
+                    
+                    <!-- Step 1: Competencia -->
+                    <div class="form-step active" data-step="1">
+                        <h3>Paso 1: Define la Competencia</h3>
+                        <div class="form-group">
+                            <label class="form-label">Nombre del Programa de Formación</label>
+                            <input type="text" class="form-input" id="programa" placeholder="Ej: Técnico en Soldadura">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Competencia a Desarrollar</label>
+                            <textarea class="form-textarea" id="competencia" placeholder="Ej: Aplicar técnicas de soldadura SMAW en posición plana según normas de calidad"></textarea>
+                        </div>
+                        <div class="suggestion-box">
+                            <div class="suggestion-title">💡 Sugerencia de IA</div>
+                            <p>Para una redacción clara, incluye: <strong>Verbo de acción + Objeto + Condición</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Resultados de Aprendizaje -->
+                    <div class="form-step" data-step="2">
+                        <h3>Paso 2: Resultados de Aprendizaje</h3>
+                        <div class="form-group">
+                            <label class="form-label">Selecciona el Nivel de Bloom</label>
+                            <select class="form-select" id="bloomLevel">
+                                <option value="">-- Selecciona un nivel --</option>
+                                <option value="1">Nivel 1 - Recordar</option>
+                                <option value="2">Nivel 2 - Comprender</option>
+                                <option value="3">Nivel 3 - Aplicar</option>
+                                <option value="4">Nivel 4 - Analizar</option>
+                                <option value="5">Nivel 5 - Evaluar</option>
+                                <option value="6">Nivel 6 - Crear</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Resultado de Aprendizaje</label>
+                            <textarea class="form-textarea" id="resultadoAprendizaje" placeholder="La IA sugerirá un resultado basado en tu selección..."></textarea>
+                        </div>
+                        <div class="suggestion-box" id="bloomSuggestion" style="display: none;">
+                            <div class="suggestion-title">🤖 Sugerencia de IA basada en Bloom</div>
+                            <p id="suggestionText"></p>
+                            <button type="button" class="btn-secondary" style="margin-top: 1rem;" onclick="useSuggestion()">
+                                <i class="bi bi-check-circle"></i> Usar esta sugerencia
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Actividades -->
+                    <div class="form-step" data-step="3">
+                        <h3>Paso 3: Diseña Actividades</h3>
+                        <div class="form-group">
+                            <label class="form-label">Actividades de Aprendizaje</label>
+                            <textarea class="form-textarea" id="actividades" rows="8" placeholder="Describe las actividades que realizarán los aprendices..."></textarea>
+                        </div>
+                        <div class="suggestion-box">
+                            <div class="suggestion-title">💡 Sugerencia de IA</div>
+                            <p>Para actividades de nivel <strong id="nivelActividad">--</strong>, considera:</p>
+                            <ul id="actividadesSugeridas" style="margin-top: 1rem; padding-left: 1.5rem;">
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Recursos Necesarios</label>
+                            <input type="text" class="form-input" id="recursos" placeholder="Ej: Máquina soldadora, electrodos E6013, EPP completo">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tiempo Estimado (horas)</label>
+                            <input type="number" class="form-input" id="tiempo" placeholder="Ej: 8" min="1">
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Criterios de Evaluación -->
+                    <div class="form-step" data-step="4">
+                        <h3>Paso 4: Criterios de Evaluación</h3>
+                        <div class="form-group">
+                            <label class="form-label">Criterios de Evaluación</label>
+                            <textarea class="form-textarea" id="criterios" rows="8" placeholder="Define cómo evaluarás el logro del resultado de aprendizaje..."></textarea>
+                        </div>
+                        <div class="suggestion-box">
+                            <div class="suggestion-title">🤖 Sugerencia de IA</div>
+                            <p>Para el nivel de Bloom seleccionado, los criterios deben:</p>
+                            <ul id="criteriosSugeridos" style="margin-top: 1rem; padding-left: 1.5rem;">
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Evidencias Requeridas</label>
+                            <input type="text" class="form-input" id="evidencias" placeholder="Ej: Producto: 3 cordones de soldadura / Conocimiento: Prueba escrita">
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Preview -->
+                    <div class="form-step" data-step="5">
+                        <h3>Paso 5: Revisión Final</h3>
+                        <div class="preview-container" id="preview">
+                            <div class="preview-title">📄 Vista Previa de tu Guía</div>
+                            
+                            <div class="preview-section">
+                                <h4>1. Información General</h4>
+                                <p><strong>Programa:</strong> <span id="prev-programa">--</span></p>
+                                <p><strong>Competencia:</strong> <span id="prev-competencia">--</span></p>
+                                <p><strong>Tiempo:</strong> <span id="prev-tiempo">--</span> horas</p>
+                            </div>
+
+                            <div class="preview-section">
+                                <h4>2. Resultado de Aprendizaje (Nivel Bloom: <span id="prev-bloom">--</span>)</h4>
+                                <p id="prev-resultado">--</p>
+                            </div>
+
+                            <div class="preview-section">
+                                <h4>3. Actividades de Aprendizaje</h4>
+                                <p id="prev-actividades">--</p>
+                                <p style="margin-top: 1rem;"><strong>Recursos:</strong> <span id="prev-recursos">--</span></p>
+                            </div>
+
+                            <div class="preview-section">
+                                <h4>4. Criterios de Evaluación</h4>
+                                <p id="prev-criterios">--</p>
+                                <p style="margin-top: 1rem;"><strong>Evidencias:</strong> <span id="prev-evidencias">--</span></p>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 2rem;">
+                            <button type="button" class="btn-action btn-secondary" onclick="exportHTML()">
+                                <i class="bi bi-file-earmark-code"></i> Exportar HTML
+                            </button>
+                            <button type="button" class="btn-action btn-primary" onclick="copyToClipboard()">
+                                <i class="bi bi-clipboard"></i> Copiar Texto
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="button-group">
+                        <button type="button" class="btn-action btn-secondary" id="prevBtn" onclick="prevStep()" style="display: none;">
+                            <i class="bi bi-arrow-left"></i> Anterior
+                        </button>
+                        <button type="button" class="btn-action btn-primary" id="nextBtn" onclick="nextStep()">
+                            Siguiente <i class="bi bi-arrow-right"></i>
+                        </button>
+                        <button type="button" class="btn-action btn-primary" id="finishBtn" onclick="finishGuide()" style="display: none;">
+                            <i class="bi bi-check-circle"></i> Completar Guía
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <!-- Tab: Examples -->
+        <div id="examples" class="tab-content">
+            <h2 style="text-align: center; margin-bottom: 2rem;">💡 Ejemplos por Sector SENA</h2>
+            <p style="text-align: center; opacity: 0.8; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                Click en cada ejemplo para cargar una guía pre-diseñada que puedes editar
+            </p>
+
+            <div class="examples-grid">
+                
+                <!-- Example 1 -->
+                <div class="example-card" onclick="loadExample(1)">
+                    <div class="example-icon">⚙️</div>
+                    <h3 class="example-title">Técnico en Soldadura</h3>
+                    <p class="example-description">Aplicar técnicas de soldadura SMAW en posición plana (Nivel Bloom: Aplicar)</p>
+                </div>
+
+                <!-- Example 2 -->
+                <div class="example-card" onclick="loadExample(2)">
+                    <div class="example-icon">💻</div>
+                    <h3 class="example-title">Análisis de Datos</h3>
+                    <p class="example-description">Analizar conjuntos de datos usando Python y visualizaciones (Nivel Bloom: Analizar)</p>
+                </div>
+
+                <!-- Example 3 -->
+                <div class="example-card" onclick="loadExample(3)">
+                    <div class="example-icon">🌾</div>
+                    <h3 class="example-title">Producción Agrícola</h3>
+                    <p class="example-description">Diseñar un plan de siembra sostenible para cultivos de ciclo corto (Nivel Bloom: Crear)</p>
+                </div>
+
+                <!-- Example 4 -->
+                <div class="example-card" onclick="loadExample(4)">
+                    <div class="example-icon">🍳</div>
+                    <h3 class="example-title">Gastronomía</h3>
+                    <p class="example-description">Evaluar la calidad de preparaciones culinarias según estándares (Nivel Bloom: Evaluar)</p>
+                </div>
+
+                <!-- Example 5 -->
+                <div class="example-card" onclick="loadExample(5)">
+                    <div class="example-icon">🏗️</div>
+                    <h3 class="example-title">Construcción</h3>
+                    <p class="example-description">Explicar los principios estructurales de una edificación (Nivel Bloom: Comprender)</p>
+                </div>
+
+                <!-- Example 6 -->
+                <div class="example-card" onclick="loadExample(6)">
+                    <div class="example-icon">🚗</div>
+                    <h3 class="example-title">Mecánica Automotriz</h3>
+                    <p class="example-description">Identificar componentes del sistema de frenos de un vehículo (Nivel Bloom: Recordar)</p>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">📚</div>
+            <h2 class="success-title">¡Guía Completada!</h2>
+            <div class="badge-earned">
+                <i class="bi bi-award-fill"></i>
+                Insignia "Arquitecto Bloom" Obtenida
+            </div>
+            <p style="opacity: 0.8; margin-bottom: 2rem;">
+                Has creado tu primera guía de aprendizaje con IA y Taxonomía de Bloom
+            </p>
+            <button class="btn-action btn-primary" onclick="completeStation()">
+                <i class="bi bi-check-circle"></i> Completar Estación
+            </button>
+            <button class="btn-action btn-secondary" onclick="closeModal()" style="margin-top: 1rem;">
+                Crear Otra Guía
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const bodyElement = document.body;
+        
+        const savedTheme = localStorage.getItem('odisea-theme') || 'dark';
+        bodyElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = bodyElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            bodyElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('odisea-theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+        
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'bi bi-sun-fill';
+            } else {
+                icon.className = 'bi bi-moon-stars-fill';
+            }
+        }
+
+        // Tabs
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const targetTab = btn.dataset.tab;
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === targetTab) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Bloom Pyramid Toggle
+        document.querySelectorAll('.bloom-level').forEach(level => {
+            level.addEventListener('click', () => {
+                const details = level.querySelector('.level-details');
+                details.classList.toggle('active');
+            });
+        });
+
+        // Form Navigation
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        function updateStepIndicator() {
+            document.querySelectorAll('.step').forEach((step, index) => {
+                const stepNum = index + 1;
+                if (stepNum < currentStep) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (stepNum === currentStep) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('active', 'completed');
+                }
+            });
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+            document.querySelector(`.form-step[data-step="${step}"]`).classList.add('active');
+            
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const finishBtn = document.getElementById('finishBtn');
+            
+            prevBtn.style.display = step === 1 ? 'none' : 'flex';
+            nextBtn.style.display = step === totalSteps ? 'none' : 'flex';
+            finishBtn.style.display = step === totalSteps ? 'flex' : 'none';
+            
+            updateStepIndicator();
+
+            if (step === 5) {
+                updatePreview();
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+
+        // Bloom Level Change
+        document.getElementById('bloomLevel').addEventListener('change', function() {
+            const level = parseInt(this.value);
+            if (level) {
+                generateBloomSuggestion(level);
+                updateActivitySuggestions(level);
+                updateCriteriaSuggestions(level);
+            }
+        });
+
+        function generateBloomSuggestion(level) {
+            const programa = document.getElementById('programa').value || 'el programa';
+            const competencia = document.getElementById('competencia').value || 'la competencia definida';
+            
+            const suggestions = {
+                1: {
+                    verb: 'Identificar',
+                    text: `Identificar los elementos básicos de ${competencia}, reconociendo sus características principales.`
+                },
+                2: {
+                    verb: 'Explicar',
+                    text: `Explicar los principios fundamentales de ${competencia}, describiendo su funcionamiento y aplicaciones.`
+                },
+                3: {
+                    verb: 'Aplicar',
+                    text: `Aplicar técnicas de ${competencia} en situaciones reales, demostrando dominio práctico.`
+                },
+                4: {
+                    verb: 'Analizar',
+                    text: `Analizar casos relacionados con ${competencia}, identificando causas, efectos y relaciones.`
+                },
+                5: {
+                    verb: 'Evaluar',
+                    text: `Evaluar la calidad de procesos relacionados con ${competencia}, justificando criterios de decisión.`
+                },
+                6: {
+                    verb: 'Diseñar',
+                    text: `Diseñar soluciones innovadoras que integren ${competencia}, creando propuestas originales.`
+                }
+            };
+
+            const suggestion = suggestions[level];
+            document.getElementById('suggestionText').textContent = suggestion.text;
+            document.getElementById('bloomSuggestion').style.display = 'block';
+        }
+
+        function useSuggestion() {
+            const suggestionText = document.getElementById('suggestionText').textContent;
+            document.getElementById('resultadoAprendizaje').value = suggestionText;
+        }
+
+        function updateActivitySuggestions(level) {
+            const suggestions = {
+                1: ['Listas y cuestionarios', 'Flashcards y memorización', 'Identificación de elementos'],
+                2: ['Explicaciones orales o escritas', 'Resúmenes y mapas conceptuales', 'Comparaciones y clasificaciones'],
+                3: ['Ejercicios prácticos', 'Simulaciones', 'Demostraciones en taller'],
+                4: ['Estudios de caso', 'Investigaciones', 'Comparaciones detalladas'],
+                5: ['Debates y defensas', 'Evaluaciones de proyectos', 'Juicios fundamentados'],
+                6: ['Proyectos integradores', 'Diseño de prototipos', 'Propuestas innovadoras']
+            };
+
+            const list = document.getElementById('actividadesSugeridas');
+            const levelNames = ['', 'Recordar', 'Comprender', 'Aplicar', 'Analizar', 'Evaluar', 'Crear'];
+            document.getElementById('nivelActividad').textContent = levelNames[level];
+            
+            list.innerHTML = suggestions[level].map(s => `<li>${s}</li>`).join('');
+        }
+
+        function updateCriteriaSuggestions(level) {
+            const suggestions = {
+                1: ['Ser verificables con respuestas correctas/incorrectas', 'Medir la capacidad de recordar información específica'],
+                2: ['Evaluar la capacidad de explicar con propias palabras', 'Verificar la comprensión de conceptos fundamentales'],
+                3: ['Observar la ejecución correcta de procedimientos', 'Verificar el uso apropiado de técnicas y herramientas'],
+                4: ['Evaluar la capacidad de identificar patrones y relaciones', 'Verificar argumentación lógica y fundamentada'],
+                5: ['Medir la calidad de los juicios emitidos', 'Verificar la justificación de decisiones con criterios'],
+                6: ['Evaluar originalidad y viabilidad de propuestas', 'Verificar integración coherente de conocimientos']
+            };
+
+            const list = document.getElementById('criteriosSugeridos');
+            list.innerHTML = suggestions[level].map(s => `<li>${s}</li>`).join('');
+        }
+
+        function updatePreview() {
+            document.getElementById('prev-programa').textContent = document.getElementById('programa').value || '--';
+            document.getElementById('prev-competencia').textContent = document.getElementById('competencia').value || '--';
+            document.getElementById('prev-tiempo').textContent = document.getElementById('tiempo').value || '--';
+            
+            const bloomLevelSelect = document.getElementById('bloomLevel');
+            const bloomText = bloomLevelSelect.options[bloomLevelSelect.selectedIndex]?.text || '--';
+            document.getElementById('prev-bloom').textContent = bloomText;
+            
+            document.getElementById('prev-resultado').textContent = document.getElementById('resultadoAprendizaje').value || '--';
+            document.getElementById('prev-actividades').textContent = document.getElementById('actividades').value || '--';
+            document.getElementById('prev-recursos').textContent = document.getElementById('recursos').value || '--';
+            document.getElementById('prev-criterios').textContent = document.getElementById('criterios').value || '--';
+            document.getElementById('prev-evidencias').textContent = document.getElementById('evidencias').value || '--';
+        }
+
+        function exportHTML() {
+            const preview = document.getElementById('preview').innerHTML;
+            const htmlContent = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Guía de Aprendizaje - ${document.getElementById('programa').value}</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 2rem auto; padding: 2rem; }
+        h1, h2, h3, h4 { color: #667eea; }
+        .preview-section { margin: 2rem 0; padding: 1.5rem; background: #f8f9fa; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    ${preview}
+</body>
+</html>
+            `;
+            
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'guia-aprendizaje.html';
+            a.click();
+        }
+
+        function copyToClipboard() {
+            const programa = document.getElementById('programa').value;
+            const competencia = document.getElementById('competencia').value;
+            const tiempo = document.getElementById('tiempo').value;
+            const resultado = document.getElementById('resultadoAprendizaje').value;
+            const actividades = document.getElementById('actividades').value;
+            const recursos = document.getElementById('recursos').value;
+            const criterios = document.getElementById('criterios').value;
+            const evidencias = document.getElementById('evidencias').value;
+
+            const text = `
+GUÍA DE APRENDIZAJE
+
+1. INFORMACIÓN GENERAL
+Programa: ${programa}
+Competencia: ${competencia}
+Tiempo: ${tiempo} horas
+
+2. RESULTADO DE APRENDIZAJE
+${resultado}
+
+3. ACTIVIDADES DE APRENDIZAJE
+${actividades}
+
+Recursos: ${recursos}
+
+4. CRITERIOS DE EVALUACIÓN
+${criterios}
+
+Evidencias: ${evidencias}
+            `;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Guía copiada al portapapeles');
+            });
+        }
+
+        function finishGuide() {
+            document.getElementById('successModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+            currentStep = 1;
+            showStep(1);
+            document.getElementById('guideForm').reset();
+        }
+
+        function completeStation() {
+            localStorage.setItem('odisea-station6-completed', 'true');
+            
+            if (window.odiseaProgress) {
+                window.odiseaProgress.completeStation(6);
+                window.odiseaProgress.earnBadge(6);
+            } else {
+                const progress = JSON.parse(localStorage.getItem('odisea-progress') || '{"stations":{},"badges":{}}');
+                progress.stations[6] = true;
+                progress.badges[6] = true;
+                localStorage.setItem('odisea-progress', JSON.stringify(progress));
+            }
+
+            window.location.href = '../index.html';
+        }
+
+        // Load Example
+        const examples = {
+            1: {
+                programa: 'Técnico en Soldadura',
+                competencia: 'Aplicar técnicas de soldadura SMAW en posición plana según normas de calidad',
+                bloomLevel: '3',
+                resultado: 'Aplicar técnicas de soldadura SMAW en posición plana en situaciones reales, demostrando dominio práctico.',
+                actividades: '1. Preparación de material base y electrodos\n2. Ejecución de cordones de soldadura en posición plana\n3. Inspección visual de calidad de cordones',
+                recursos: 'Máquina soldadora SMAW, electrodos E6013, EPP completo, mesa de trabajo',
+                tiempo: '8',
+                criterios: '- Selecciona correctamente el electrodo según el material base\n- Mantiene parámetros de soldadura dentro de especificaciones\n- Los cordones cumplen normas de calidad visual',
+                evidencias: 'Producto: 3 cordones de soldadura en posición plana / Conocimiento: Prueba sobre normas AWS'
+            },
+            2: {
+                programa: 'Tecnólogo en Análisis y Desarrollo de Sistemas de Información',
+                competencia: 'Analizar conjuntos de datos usando Python y herramientas de visualización',
+                bloomLevel: '4',
+                resultado: 'Analizar conjuntos de datos empresariales, identificando patrones, tendencias y relaciones significativas.',
+                actividades: '1. Limpieza y preparación de datasets\n2. Análisis exploratorio con Pandas\n3. Creación de visualizaciones con Matplotlib\n4. Interpretación de resultados',
+                recursos: 'Python 3.x, Jupyter Notebook, librerías: Pandas, Matplotlib, Seaborn',
+                tiempo: '12',
+                criterios: '- Identifica correctamente outliers y valores atípicos\n- Genera visualizaciones apropiadas según el tipo de datos\n- Interpreta resultados con argumentación fundamentada',
+                evidencias: 'Producto: Notebook con análisis completo / Desempeño: Presentación de hallazgos'
+            },
+            3: {
+                programa: 'Técnico en Producción Agrícola',
+                competencia: 'Diseñar planes de siembra sostenible para cultivos de ciclo corto',
+                bloomLevel: '6',
+                resultado: 'Diseñar un plan de siembra sostenible que integre rotación de cultivos, manejo orgánico y aprovechamiento de recursos.',
+                actividades: '1. Análisis de suelo y clima de la zona\n2. Selección de cultivos apropiados\n3. Diseño de distribución espacial\n4. Planificación de manejo integrado de plagas\n5. Cálculo de costos y proyección de producción',
+                recursos: 'Análisis de suelos, catálogos de semillas, software de diseño agrícola',
+                tiempo: '16',
+                criterios: '- El plan integra principios de sostenibilidad\n- La rotación de cultivos es técnicamente viable\n- Los cálculos económicos son realistas\n- La propuesta es innovadora y factible',
+                evidencias: 'Producto: Plan de siembra documentado / Conocimiento: Sustentación técnica'
+            },
+            4: {
+                programa: 'Técnico en Cocina',
+                competencia: 'Evaluar la calidad de preparaciones culinarias según estándares gastronómicos',
+                bloomLevel: '5',
+                resultado: 'Evaluar preparaciones culinarias aplicando criterios de calidad organoléptica, presentación y cumplimiento de estándares.',
+                actividades: '1. Análisis sensorial de preparaciones (sabor, aroma, textura)\n2. Evaluación de presentación y montaje\n3. Verificación de temperaturas de servicio\n4. Emisión de juicio fundamentado con criterios profesionales',
+                recursos: 'Fichas de evaluación sensorial, termómetros, cámara fotográfica',
+                tiempo: '6',
+                criterios: '- Aplica correctamente escalas organolépticas\n- Justifica sus evaluaciones con argumentos técnicos\n- Identifica aciertos y oportunidades de mejora\n- Emite juicios objetivos y profesionales',
+                evidencias: 'Desempeño: Evaluación de 5 preparaciones / Conocimiento: Rúbrica de evaluación'
+            },
+            5: {
+                programa: 'Técnico en Construcción',
+                competencia: 'Explicar principios estructurales aplicados en edificaciones',
+                bloomLevel: '2',
+                resultado: 'Explicar los principios de cargas, esfuerzos y estabilidad estructural, describiendo su aplicación en edificaciones.',
+                actividades: '1. Identificación de elementos estructurales en planos\n2. Explicación del flujo de cargas\n3. Descripción de tipos de esfuerzos (tracción, compresión, flexión)\n4. Exposición sobre sistemas estructurales',
+                recursos: 'Planos arquitectónicos y estructurales, maquetas, videos técnicos',
+                tiempo: '8',
+                criterios: '- Explica con claridad el concepto de cargas y su distribución\n- Describe correctamente los tipos de esfuerzos\n- Identifica elementos estructurales en planos\n- Usa terminología técnica apropiada',
+                evidencias: 'Conocimiento: Exposición oral / Producto: Infografía explicativa'
+            },
+            6: {
+                programa: 'Técnico en Mecánica Automotriz',
+                competencia: 'Identificar componentes del sistema de frenos',
+                bloomLevel: '1',
+                resultado: 'Identificar y nombrar correctamente los componentes del sistema de frenos de disco y tambor en vehículos.',
+                actividades: '1. Reconocimiento de piezas en sistema de frenos real\n2. Etiquetado de componentes en diagrama\n3. Clasificación de piezas según su función\n4. Memorización de especificaciones técnicas',
+                recursos: 'Sistema de frenos desarmado, diagramas técnicos, catálogos de repuestos',
+                tiempo: '4',
+                criterios: '- Nombra correctamente al menos 15 componentes\n- Identifica diferencias entre frenos de disco y tambor\n- Reconoce piezas por su forma y función\n- Lista especificaciones de mantenimiento',
+                evidencias: 'Conocimiento: Prueba de identificación / Desempeño: Ejercicio práctico de reconocimiento'
+            }
+        };
+
+        function loadExample(num) {
+            const example = examples[num];
+            if (example) {
+                document.getElementById('programa').value = example.programa;
+                document.getElementById('competencia').value = example.competencia;
+                document.getElementById('bloomLevel').value = example.bloomLevel;
+                document.getElementById('resultadoAprendizaje').value = example.resultado;
+                document.getElementById('actividades').value = example.actividades;
+                document.getElementById('recursos').value = example.recursos;
+                document.getElementById('tiempo').value = example.tiempo;
+                document.getElementById('criterios').value = example.criterios;
+                document.getElementById('evidencias').value = example.evidencias;
+
+                // Switch to generator tab
+                document.querySelector('.tab-btn[data-tab="generator"]').click();
+                
+                // Update suggestions
+                const level = parseInt(example.bloomLevel);
+                updateActivitySuggestions(level);
+                updateCriteriaSuggestions(level);
+
+                alert('✅ Ejemplo cargado. Puedes editarlo y continuar con el paso a paso.');
+            }
+        }
+
+        // Check if already completed
+        if (localStorage.getItem('odisea-station6-completed') === 'true') {
+            const header = document.querySelector('.station-header');
+            const badge = document.createElement('div');
+            badge.style.cssText = 'display: inline-block; padding: 0.5rem 1rem; background: var(--success); color: white; border-radius: 20px; font-size: 0.9rem; margin-top: 1rem;';
+            badge.innerHTML = '<i class="bi bi-check-circle-fill"></i> Ya completaste esta estación';
+            header.appendChild(badge);
+        }
+    </script>
+
+</body>
+</html>

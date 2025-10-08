@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estación 4: Arsenal de Herramientas - Odisea IA</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4facfe;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark-bg: #0f0c29;
+            --dark-card: #1a1640;
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --text-dark: #ffffff;
+            --text-light: #2d3436;
+            --glow: rgba(102, 126, 234, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+        }
+
+        body[data-theme="dark"] {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #2d1b69 100%);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] {
+            background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 100%);
+            color: var(--text-light);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        body[data-theme="dark"] .nav-bar {
+            background: rgba(15, 12, 41, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .nav-bar {
+            background: rgba(248, 249, 250, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-5px);
+            color: white;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px var(--glow);
+        }
+
+        .theme-toggle i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Header */
+        .station-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .station-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .station-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #3498db, var(--success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .station-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            border: 2px solid;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        body[data-theme="dark"] .tab-btn {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] .tab-btn {
+            border-color: rgba(0, 0, 0, 0.2);
+            color: var(--text-light);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--glow);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            padding: 2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body[data-theme="dark"] .tool-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .tool-card {
+            background: var(--light-card);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px var(--glow);
+        }
+
+        .tool-card.special {
+            border: 2px solid var(--primary);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(192, 132, 252, 0.1));
+        }
+
+        .tool-card.special::before {
+            content: '⭐ ESPECIAL';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.3rem 0.75rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .tool-badge {
+            display: inline-block;
+            padding: 0.3rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .badge-text { background: rgba(102, 126, 234, 0.2); color: var(--primary); }
+        .badge-image { background: rgba(244, 114, 182, 0.2); color: #f472b6; }
+        .badge-audio { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+        .badge-research { background: rgba(251, 146, 60, 0.2); color: #fb923c; }
+        .badge-code { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+
+        .tool-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-description {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tool-link:hover {
+            background: var(--secondary);
+            transform: translateX(5px);
+            color: white;
+        }
+
+        /* Game Section */
+        .game-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 3rem;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        body[data-theme="dark"] .game-container {
+            background: var(--dark-card);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        body[data-theme="light"] .game-container {
+            background: var(--light-card);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .game-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .game-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        /* Progress Bar */
+        .progress-track {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .progress-track::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+
+        .progress-step {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.pending {
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-step.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: 3px solid var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        .progress-step.completed {
+            background: var(--success);
+            border: 3px solid var(--success);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Phase Card */
+        .phase-card {
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .phase-card.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        body[data-theme="dark"] .phase-card {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body[data-theme="light"] .phase-card {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .phase-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .phase-description {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .evidence-box {
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        body[data-theme="dark"] .evidence-box {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        body[data-theme="light"] .evidence-box {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .prompt-box {
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        body[data-theme="dark"] .prompt-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .prompt-box {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px var(--glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #3498db;
+            transform: translateY(-3px);
+        }
+
+        /* Validation Section */
+        .validation-area {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        .validation-input {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        body[data-theme="dark"] .validation-input {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] .validation-input {
+            background: white;
+            border-color: rgba(0, 0, 0, 0.1);
+            color: var(--text-light);
+        }
+
+        .validation-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--glow);
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        body[data-theme="dark"] .checklist li {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body[data-theme="light"] .checklist li {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .checklist li.checked {
+            background: rgba(74, 172, 254, 0.2);
+            color: var(--success);
+        }
+
+        /* Complete Button */
+        .complete-section {
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .btn-complete {
+            padding: 1.5rem 3rem;
+            background: linear-gradient(135deg, var(--success), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-complete:hover:not(:disabled) {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px var(--glow);
+        }
+
+        .btn-complete:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Success Modal */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .success-modal.active {
+            display: flex;
+        }
+
+        .success-content {
+            max-width: 500px;
+            width: 90%;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        body[data-theme="dark"] .success-content {
+            background: var(--dark-card);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .success-content {
+            background: var(--light-card);
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .success-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .badge-earned {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--success), var(--primary));
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            margin: 1.5rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs-container {
+                gap: 0.5rem;
+            }
+
+            .tab-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-action {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-content">
+            <a href="../index.html" class="back-btn">
+                <i class="bi bi-arrow-left"></i>
+                Volver al Mapa
+            </a>
+            <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                <i class="bi bi-sun-fill"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <header class="station-header">
+            <div class="station-icon">🛠️</div>
+            <h1 class="station-title">Arsenal de Herramientas</h1>
+            <p class="station-subtitle">
+                8 herramientas de IA Generativa para potenciar tu labor como instructor + El Desafío Multimodal con Gemini
+            </p>
+        </header>
+
+        <!-- Main Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="tools">
+                <i class="bi bi-grid-3x3"></i> Herramientas
+            </button>
+            <button class="tab-btn" data-tab="game">
+                <i class="bi bi-controller"></i> Desafío Gemini
+            </button>
+        </div>
+
+        <!-- Tab: Tools -->
+        <div id="tools" class="tab-content active">
+            <div class="tools-grid">
+                
+                <!-- ChatGPT -->
+                <div class="tool-card">
+                    <span class="tool-badge badge-text">TEXTO</span>
+                    <div class="tool-icon">💬</div>
+                    <h3 class="tool-title">ChatGPT</h3>
+                    <p class="tool-description">
+                        Genera planes de sesión, protocolos de seguridad, comunicados internos y material didáctico con el modelo más popular.
+                    </p>
+                    <a href="https://chat.openai.com" target="_blank" class="tool-link">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        Ir a ChatGPT
+                    </a>
+                </div>
+
+                <!-- Grok -->
+                <div class="tool-card">
+                    <span class="tool-badge badge-text">TEXTO + SOCIAL</span>
+                    <div class="tool-icon">🤖</div>
+                    <h3 class="tool-title">Grok</h3>
+                    <p class="tool-description">
+                        IA con acceso directo a X (Twitter). Perfecto para analizar tendencias del sector productivo y crear contenido para redes.
+                    </p>
+                    <a href="https://x.ai" target="_blank" class="tool-link">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        Ir a Grok
+                    </a>
+                </div>
+
+                <!-- Napkin -->
+                <div class="tool-card">
+                    <span class="tool-badge badge-image">DIAGRAMA</span>
+                    <div class="tool-icon">📊</div>
+                    <h3 class="tool-title">Napkin</h3>
+                    <p class="tool-description">
+                        Transforma texto en diagramas visuales. Crea mapas conceptuales y esquemas para tus presentaciones sin diseñar manualmente.
+                    </p>
+                    <a href="https://app.napkin.ai" target="_blank" class="tool-link">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        Ir a Napkin
+                    </a>
+                </div>
+
+                <!-- Ideogram -->
+                <div class="tool-card">
+                    <span class="tool-badge badge-image">IMAGEN + TEXTO</span>
+                    <div class="tool-icon">🎨</div>
+                    <h3 class="tool-title">Ideogram</h3>
+                    <p class="tool-description">
+                        Genera imágenes con texto legible. Perfecto para crear logos, señalética de seguridad o material visual para la formación.
+                    </p>
+                    <a href="https://ideogram.ai" target="_blank" class="tool-link">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        Ir a Ideogram
+                    </a>
+                </div>
+
+                <!-- Perplexity -->
+                <div class="tool-card">
+                    <span class="tool-badge badge-research">INVESTIGACIÓN</span>
+                    <div class="tool-icon">🔍</div>
+                    <h3 class="tool-title">Perplexity</h3>
+                    <p class="tool-description">
+                        Busca y sintetiza información con fuentes verificadas. Ideal para investigar normativas, nuevas tecnologías y estudios técnicos.
+                    </p>
+                    <a href="https://www.perplexity.ai" target="_blank" class="tool-link">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        Ir a Perplexity
+                    </a>
+                </div>
+
+                <!-- Suno -->
+                <div class="tool-card">
+                    <span class="tool-badge badge-audio">AUDIO</span>
+                    <div class="tool-icon">🎵</div>
+                    <h3 class="tool-title">Suno</h3>
+                    <p class="tool-description">
+                        Crea música y jingles originales. Perfecto para campañas de seguridad, videos institucionales y ambientación de eventos.
+                    </p>
+                    <a href="https://www.suno.ai" target="_blank" class="tool-link">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        Ir a Suno
+                    </a>
+                </div>
+
+                <!-- NotebookLM -->
+                <div class="tool-card">
+                    <span class="tool-badge badge-research">DOCUMENTOS</span>
+                    <div class="tool-icon">📚</div>
+                    <h3 class="tool-title">NotebookLM</h3>
+                    <p class="tool-description">
+                        Analiza PDFs, manuales y documentos técnicos. Sube la normatividad SENA y extrae insights clave para tu formación.
+                    </p>
+                    <a href="https://notebooklm.google.com" target="_blank" class="tool-link">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        Ir a NotebookLM
+                    </a>
+                </div>
+
+                <!-- Gemini -->
+                <div class="tool-card special">
+                    <span class="tool-badge badge-code">MULTIMODAL</span>
+                    <div class="tool-icon">💎</div>
+                    <h3 class="tool-title">Gemini</h3>
+                    <p class="tool-description">
+                    <p class="tool-description">
+                        El más versátil: texto, imágenes, código, hojas de cálculo y más. Tu copiloto definitivo para diseñar actividades complejas.
+                    </p>
+                    <a href="https://gemini.google.com" target="_blank" class="tool-link">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        Ir a Gemini
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Tab: Game -->
+        <div id="game" class="tab-content">
+            <div class="game-container">
+                <div class="game-header">
+                    <h2 class="game-title">🕵️ Detective de Competencias</h2>
+                    <p class="game-subtitle">
+                        Usa Gemini para analizar evidencias de aprendizaje en diferentes formatos y demostrar su poder multimodal
+                    </p>
+                </div>
+
+                <!-- Progress Track -->
+                <div class="progress-track">
+                    <div class="progress-step pending" id="step-1">1</div>
+                    <div class="progress-step pending" id="step-2">2</div>
+                    <div class="progress-step pending" id="step-3">3</div>
+                </div>
+
+                <!-- Phase 1: Texto -->
+                <div class="phase-card active" id="phase-1">
+                    <h3 class="phase-title">📝 Fase 1: Análisis de Evidencia Textual</h3>
+                    <p class="phase-description">
+                        Un aprendiz del programa Tecnólogo en Gestión Logística envió el siguiente ensayo sobre optimización de inventarios. Usa Gemini para evaluar si cumple con los criterios de la competencia.
+                    </p>
+
+                    <div class="evidence-box">
+                        <strong>Evidencia - Ensayo del aprendiz:</strong>
+                        <p style="margin-top: 1rem; line-height: 1.8;">
+                            "La gestión de inventarios es fundamental para las empresas. Los sistemas de inventario pueden ser perpetuos o periódicos. El método ABC clasifica los productos en tres categorías según su valor. Los productos A son los más importantes y requieren mayor control. Es importante hacer conteos físicos regularmente para evitar faltantes."
+                        </p>
+                    </div>
+
+                    <div class="prompt-box">
+                        <strong style="color: var(--success);">📋 Prompt sugerido para copiar:</strong><br><br>
+Actúa como instructor SENA evaluando evidencias de aprendizaje.
+
+Analiza el siguiente ensayo de un aprendiz de Gestión Logística sobre inventarios:
+
+[PEGA AQUÍ EL TEXTO DEL ENSAYO]
+
+Evalúa según estos criterios de la Taxonomía de Bloom (nivel COMPRENDER):
+1. ¿Explica claramente los conceptos clave?
+2. ¿Relaciona los conceptos entre sí?
+3. ¿Incluye ejemplos o aplicaciones?
+4. ¿Usa terminología técnica apropiada?
+
+Presenta tu análisis en formato de lista con cada criterio y si cumple (SÍ/NO/PARCIAL).
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-action btn-secondary" onclick="copyPrompt(1)">
+                            <i class="bi bi-clipboard"></i>
+                            Copiar Prompt
+                        </button>
+                        <button class="btn-action btn-primary" onclick="window.open('https://gemini.google.com', '_blank')">
+                            <i class="bi bi-rocket-takeoff"></i>
+                            Abrir Gemini
+                        </button>
+                    </div>
+
+                    <div class="validation-area">
+                        <h4 style="margin-bottom: 1rem;">✅ Validación de Fase</h4>
+                        <p style="margin-bottom: 1rem; opacity: 0.8;">¿Gemini identificó correctamente los 4 criterios?</p>
+                        <ul class="checklist">
+                            <li>
+                                <input type="checkbox" id="check-1-1">
+                                <label for="check-1-1">Identificó si explica conceptos claramente</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="check-1-2">
+                                <label for="check-1-2">Evaluó la relación entre conceptos</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="check-1-3">
+                                <label for="check-1-3">Mencionó la falta/presencia de ejemplos</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="check-1-4">
+                                <label for="check-1-4">Comentó sobre terminología técnica</label>
+                            </li>
+                        </ul>
+                        <button class="btn-action btn-success" id="btn-phase-1" disabled onclick="nextPhase(2)">
+                            <i class="bi bi-check-circle"></i>
+                            Completar Fase 1
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Phase 2: Imagen -->
+                <div class="phase-card" id="phase-2">
+                    <h3 class="phase-title">📷 Fase 2: Análisis de Evidencia Visual</h3>
+                    <p class="phase-description">
+                        Un aprendiz de Soldadura envió una foto de su práctica de cordón de soldadura SMAW. Usa Gemini para analizar la calidad técnica de la imagen.
+                    </p>
+
+                    <div class="evidence-box">
+                        <strong>Evidencia - Imagen de soldadura:</strong>
+                        <p style="margin-top: 1rem;">
+                            <em style="opacity: 0.7;">💡 En la práctica real, subirías la foto directamente a Gemini. Para este ejercicio, describe a Gemini que analizarás una foto de cordón de soldadura y pídele que te diga qué aspectos debería evaluar.</em>
+                        </p>
+                    </div>
+
+                    <div class="prompt-box">
+                        <strong style="color: var(--success);">📋 Prompt sugerido para copiar:</strong><br><br>
+Actúa como instructor SENA de Soldadura evaluando evidencias prácticas.
+
+Voy a subir una imagen de un cordón de soldadura SMAW realizado por un aprendiz.
+
+Antes de que la vea, dime: ¿Qué 5 aspectos técnicos clave debo evaluar en la imagen para determinar si la técnica es correcta según normas de calidad en soldadura?
+
+Luego, cuando suba la imagen, analízala según esos 5 criterios y dame una calificación de 1-5 para cada uno.
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-action btn-secondary" onclick="copyPrompt(2)">
+                            <i class="bi bi-clipboard"></i>
+                            Copiar Prompt
+                        </button>
+                        <button class="btn-action btn-primary" onclick="window.open('https://gemini.google.com', '_blank')">
+                            <i class="bi bi-rocket-takeoff"></i>
+                            Abrir Gemini
+                        </button>
+                    </div>
+
+                    <div class="validation-area">
+                        <h4 style="margin-bottom: 1rem;">✅ Validación de Fase</h4>
+                        <p style="margin-bottom: 1rem; opacity: 0.8;">¿Gemini te dio criterios técnicos de evaluación?</p>
+                        <ul class="checklist">
+                            <li>
+                                <input type="checkbox" id="check-2-1">
+                                <label for="check-2-1">Gemini listó al menos 5 criterios técnicos</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="check-2-2">
+                                <label for="check-2-2">Los criterios son relevantes para soldadura</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="check-2-3">
+                                <label for="check-2-3">Explicó cómo evaluar cada criterio</label>
+                            </li>
+                        </ul>
+                        <button class="btn-action btn-success" id="btn-phase-2" disabled onclick="nextPhase(3)">
+                            <i class="bi bi-check-circle"></i>
+                            Completar Fase 2
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Phase 3: Mixto -->
+                <div class="phase-card" id="phase-3">
+                    <h3 class="phase-title">🎯 Fase 3: Análisis Multimodal Completo</h3>
+                    <p class="phase-description">
+                        Un aprendiz de ADSI envió su proyecto formativo (PDF) con diagramas de base de datos. Usa Gemini para generar una rúbrica de evaluación completa.
+                    </p>
+
+                    <div class="evidence-box">
+                        <strong>Evidencia - Proyecto formativo:</strong>
+                        <p style="margin-top: 1rem;">
+                            <em style="opacity: 0.7;">💡 En la práctica real, subirías el PDF con diagramas. Para este ejercicio, describe el proyecto y pide a Gemini que genere una rúbrica adaptada.</em>
+                        </p>
+                    </div>
+
+                    <div class="prompt-box">
+                        <strong style="color: var(--success);">📋 Prompt sugerido para copiar:</strong><br><br>
+Actúa como instructor SENA de Análisis y Desarrollo de Software.
+
+Necesito evaluar un proyecto formativo que incluye:
+- Documento de diseño de base de datos (modelo entidad-relación)
+- Diagramas UML (casos de uso y clases)
+- Código SQL para crear las tablas
+
+Genera una rúbrica de evaluación con:
+1. 4 criterios clave a evaluar
+2. 3 niveles de desempeño para cada criterio (Insuficiente, Aceptable, Excelente)
+3. Descripción clara de qué cumple cada nivel
+4. Puntaje numérico (escala 1-5)
+
+Presenta la rúbrica en formato de tabla.
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-action btn-secondary" onclick="copyPrompt(3)">
+                            <i class="bi bi-clipboard"></i>
+                            Copiar Prompt
+                        </button>
+                        <button class="btn-action btn-primary" onclick="window.open('https://gemini.google.com', '_blank')">
+                            <i class="bi bi-rocket-takeoff"></i>
+                            Abrir Gemini
+                        </button>
+                    </div>
+
+                    <div class="validation-area">
+                        <h4 style="margin-bottom: 1rem;">✅ Validación de Fase</h4>
+                        <p style="margin-bottom: 1rem; opacity: 0.8;">¿Gemini generó una rúbrica completa y útil?</p>
+                        <ul class="checklist">
+                            <li>
+                                <input type="checkbox" id="check-3-1">
+                                <label for="check-3-1">Incluyó 4 criterios de evaluación</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="check-3-2">
+                                <label for="check-3-2">Definió 3 niveles de desempeño claros</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="check-3-3">
+                                <label for="check-3-3">Presentó la información en formato tabla</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="check-3-4">
+                                <label for="check-3-4">La rúbrica es aplicable y práctica</label>
+                            </li>
+                        </ul>
+                        <button class="btn-action btn-success" id="btn-phase-3" disabled onclick="completeGame()">
+                            <i class="bi bi-trophy"></i>
+                            Completar Desafío
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div id="game-success" style="display: none; text-align: center; padding: 3rem; border-radius: 15px; margin-top: 2rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
+                    <h3 style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">¡Desafío Completado!</h3>
+                    <p style="font-size: 1.2rem; opacity: 0.8;">
+                        Has demostrado el poder multimodal de Gemini para analizar texto, imágenes y documentos complejos.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Complete Section -->
+        <div class="complete-section">
+            <button class="btn-complete" id="completeBtn" disabled>
+                <i class="bi bi-check-circle-fill"></i>
+                Completar Estación
+            </button>
+            <p style="margin-top: 1rem; opacity: 0.7;">
+                <i class="bi bi-info-circle"></i> Completa el Desafío Gemini para desbloquear
+            </p>
+        </div>
+
+    </main>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">🛠️</div>
+            <h2 class="success-title">¡Estación Completada!</h2>
+            <div class="badge-earned">
+                <i class="bi bi-award-fill"></i>
+                Insignia "Maestro Multimodal" Obtenida
+            </div>
+            <p style="opacity: 0.8; margin-bottom: 2rem;">
+                Has explorado el arsenal completo de herramientas IA y dominado Gemini. ¡La siguiente estación está desbloqueada!
+            </p>
+            <button class="btn-complete" onclick="window.location.href='../index.html'">
+                <i class="bi bi-map"></i>
+                Volver al Mapa
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const bodyElement = document.body;
+        
+        const savedTheme = localStorage.getItem('odisea-theme') || 'dark';
+        bodyElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = bodyElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            bodyElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('odisea-theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+        
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'bi bi-sun-fill';
+            } else {
+                icon.className = 'bi bi-moon-stars-fill';
+            }
+        }
+
+        // Main Tabs
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const targetTab = btn.dataset.tab;
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === targetTab) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Game State
+        let gameProgress = {
+            phase1: false,
+            phase2: false,
+            phase3: false
+        };
+
+        // Load game progress
+        const savedGameProgress = localStorage.getItem('odisea-station4-game');
+        if (savedGameProgress) {
+            gameProgress = JSON.parse(savedGameProgress);
+            updateGameUI();
+        }
+
+        // Copy Prompt Function
+        const prompts = {
+            1: `Actúa como instructor SENA evaluando evidencias de aprendizaje.
+
+Analiza el siguiente ensayo de un aprendiz de Gestión Logística sobre inventarios:
+
+"La gestión de inventarios es fundamental para las empresas. Los sistemas de inventario pueden ser perpetuos o periódicos. El método ABC clasifica los productos en tres categorías según su valor. Los productos A son los más importantes y requieren mayor control. Es importante hacer conteos físicos regularmente para evitar faltantes."
+
+Evalúa según estos criterios de la Taxonomía de Bloom (nivel COMPRENDER):
+1. ¿Explica claramente los conceptos clave?
+2. ¿Relaciona los conceptos entre sí?
+3. ¿Incluye ejemplos o aplicaciones?
+4. ¿Usa terminología técnica apropiada?
+
+Presenta tu análisis en formato de lista con cada criterio y si cumple (SÍ/NO/PARCIAL).`,
+            2: `Actúa como instructor SENA de Soldadura evaluando evidencias prácticas.
+
+Voy a subir una imagen de un cordón de soldadura SMAW realizado por un aprendiz.
+
+Antes de que la vea, dime: ¿Qué 5 aspectos técnicos clave debo evaluar en la imagen para determinar si la técnica es correcta según normas de calidad en soldadura?
+
+Luego, cuando suba la imagen, analízala según esos 5 criterios y dame una calificación de 1-5 para cada uno.`,
+            3: `Actúa como instructor SENA de Análisis y Desarrollo de Software.
+
+Necesito evaluar un proyecto formativo que incluye:
+- Documento de diseño de base de datos (modelo entidad-relación)
+- Diagramas UML (casos de uso y clases)
+- Código SQL para crear las tablas
+
+Genera una rúbrica de evaluación con:
+1. 4 criterios clave a evaluar
+2. 3 niveles de desempeño para cada criterio (Insuficiente, Aceptable, Excelente)
+3. Descripción clara de qué cumple cada nivel
+4. Puntaje numérico (escala 1-5)
+
+Presenta la rúbrica en formato de tabla.`
+        };
+
+        function copyPrompt(phaseNum) {
+            const text = prompts[phaseNum];
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target.closest('.btn-action');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="bi bi-check2"></i> ¡Copiado!';
+                btn.style.background = 'var(--success)';
+                btn.style.color = 'white';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 2000);
+            });
+        }
+
+        // Checklist Validation
+        document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const li = checkbox.closest('li');
+                if (checkbox.checked) {
+                    li.classList.add('checked');
+                } else {
+                    li.classList.remove('checked');
+                }
+                validatePhase();
+            });
+        });
+
+        function validatePhase() {
+            // Phase 1
+            const phase1Checks = document.querySelectorAll('#phase-1 .checklist input[type="checkbox"]');
+            const phase1AllChecked = Array.from(phase1Checks).every(cb => cb.checked);
+            document.getElementById('btn-phase-1').disabled = !phase1AllChecked;
+
+            // Phase 2
+            const phase2Checks = document.querySelectorAll('#phase-2 .checklist input[type="checkbox"]');
+            const phase2AllChecked = Array.from(phase2Checks).every(cb => cb.checked);
+            document.getElementById('btn-phase-2').disabled = !phase2AllChecked;
+
+            // Phase 3
+            const phase3Checks = document.querySelectorAll('#phase-3 .checklist input[type="checkbox"]');
+            const phase3AllChecked = Array.from(phase3Checks).every(cb => cb.checked);
+            document.getElementById('btn-phase-3').disabled = !phase3AllChecked;
+        }
+
+        // Next Phase
+        function nextPhase(phaseNum) {
+            // Mark previous phase as complete
+            gameProgress[`phase${phaseNum - 1}`] = true;
+            localStorage.setItem('odisea-station4-game', JSON.stringify(gameProgress));
+            
+            // Update UI
+            document.getElementById(`step-${phaseNum - 1}`).classList.remove('active');
+            document.getElementById(`step-${phaseNum - 1}`).classList.add('completed');
+            document.getElementById(`step-${phaseNum}`).classList.add('active');
+            
+            // Hide current phase, show next
+            document.getElementById(`phase-${phaseNum - 1}`).classList.remove('active');
+            document.getElementById(`phase-${phaseNum}`).classList.add('active');
+            
+            // Scroll to top of game container
+            document.querySelector('.game-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Complete Game
+        function completeGame() {
+            gameProgress.phase3 = true;
+            localStorage.setItem('odisea-station4-game', JSON.stringify(gameProgress));
+            localStorage.setItem('odisea-station4-game-completed', 'true');
+            
+            // Update UI
+            document.getElementById('step-3').classList.remove('active');
+            document.getElementById('step-3').classList.add('completed');
+            document.getElementById('phase-3').classList.remove('active');
+            
+            // Show success message
+            const successMsg = document.getElementById('game-success');
+            successMsg.style.display = 'block';
+            
+            if (bodyElement.getAttribute('data-theme') === 'dark') {
+                successMsg.style.background = 'rgba(74, 172, 254, 0.1)';
+                successMsg.style.border = '2px solid var(--success)';
+            } else {
+                successMsg.style.background = 'rgba(74, 172, 254, 0.1)';
+                successMsg.style.border = '2px solid var(--success)';
+            }
+            
+            // Enable complete button
+            document.getElementById('completeBtn').disabled = false;
+            
+            // Scroll to success
+            successMsg.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Update Game UI on load
+        function updateGameUI() {
+            if (gameProgress.phase1) {
+                document.getElementById('step-1').classList.add('completed');
+                document.querySelectorAll('#phase-1 .checklist input').forEach(cb => cb.checked = true);
+                validatePhase();
+            }
+            if (gameProgress.phase2) {
+                document.getElementById('step-2').classList.add('completed');
+                document.querySelectorAll('#phase-2 .checklist input').forEach(cb => cb.checked = true);
+                validatePhase();
+            }
+            if (gameProgress.phase3) {
+                document.getElementById('step-3').classList.add('completed');
+                document.querySelectorAll('#phase-3 .checklist input').forEach(cb => cb.checked = true);
+                validatePhase();
+                document.getElementById('game-success').style.display = 'block';
+                document.getElementById('completeBtn').disabled = false;
+            }
+        }
+
+        // Initialize first step as active if no progress
+        if (!gameProgress.phase1 && !gameProgress.phase2 && !gameProgress.phase3) {
+            document.getElementById('step-1').classList.add('active');
+        }
+
+        // Complete Station
+        document.getElementById('completeBtn').addEventListener('click', () => {
+            localStorage.setItem('odisea-station4-completed', 'true');
+            
+            // Update progress
+            if (window.odiseaProgress) {
+                window.odiseaProgress.completeStation(4);
+                window.odiseaProgress.earnBadge(4);
+            } else {
+                const progress = JSON.parse(localStorage.getItem('odisea-progress') || '{"stations":{},"badges":{}}');
+                progress.stations[4] = true;
+                progress.badges[4] = true;
+                localStorage.setItem('odisea-progress', JSON.stringify(progress));
+            }
+
+            // Show success modal
+            document.getElementById('successModal').classList.add('active');
+        });
+
+        // Check if already completed
+        if (localStorage.getItem('odisea-station4-completed') === 'true') {
+            const header = document.querySelector('.station-header');
+            const badge = document.createElement('div');
+            badge.style.cssText = 'display: inline-block; padding: 0.5rem 1rem; background: var(--success); color: white; border-radius: 20px; font-size: 0.9rem; margin-top: 1rem;';
+            badge.innerHTML = '<i class="bi bi-check-circle-fill"></i> Ya completaste esta estación';
+            header.appendChild(badge);
+        }
+    </script>
+
+</body>
+</html>

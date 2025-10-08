@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odisea IA - El Viaje del Instructor</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4facfe;
+            --dark-bg: #0f0c29;
+            --dark-card: #1a1640;
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --text-dark: #ffffff;
+            --text-light: #2d3436;
+            --glow: rgba(102, 126, 234, 0.3);
+            --shadow-dark: rgba(0, 0, 0, 0.3);
+            --shadow-light: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        body[data-theme="dark"] {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #2d1b69 100%);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] {
+            background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 100%);
+            color: var(--text-light);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Header */
+        .main-header {
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .main-title {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px var(--glow)); }
+            50% { filter: drop-shadow(0 0 20px var(--glow)); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--primary);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--shadow-dark);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px var(--glow);
+        }
+
+        .theme-toggle i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .progress-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        body[data-theme="light"] .progress-container {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar-custom {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-weight: 600;
+        }
+
+        /* Map Container */
+        .map-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .stations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Station Card */
+        .station-card {
+            position: relative;
+            padding: 2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            border: 2px solid transparent;
+            overflow: hidden;
+        }
+
+        body[data-theme="dark"] .station-card {
+            background: var(--dark-card);
+            box-shadow: 0 8px 20px var(--shadow-dark);
+        }
+
+        body[data-theme="light"] .station-card {
+            background: var(--light-card);
+            box-shadow: 0 8px 20px var(--shadow-light);
+        }
+
+        .station-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .station-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .station-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 40px var(--glow);
+        }
+
+        .station-card.completed {
+            border-color: var(--success);
+        }
+
+        .station-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .station-card.locked:hover {
+            transform: none;
+        }
+
+        .station-number {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .station-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .station-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        body[data-theme="dark"] .station-title {
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] .station-title {
+            color: var(--text-light);
+        }
+
+        .station-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        .station-status {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            color: var(--success);
+        }
+
+        .status-locked {
+            color: #95a5a6;
+        }
+
+        /* Badges Section */
+        .badges-section {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .badge-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 3px solid;
+            transition: all 0.3s ease;
+        }
+
+        .badge-icon.earned {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-color: var(--success);
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        .badge-icon.locked {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #95a5a6;
+            opacity: 0.3;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .badge-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .stations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+        <i class="bi bi-sun-fill"></i>
+    </button>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <h1 class="main-title">ODISEA IA</h1>
+        <p class="subtitle">El Viaje del Instructor</p>
+    </header>
+
+    <!-- Progress Section -->
+    <section class="progress-section">
+        <div class="progress-container">
+            <div class="progress-bar-custom">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <p class="progress-text">
+                <span id="progressText">0% Completado</span> - 
+                <span id="stationsCompleted">0/7 Estaciones</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- Stations Map -->
+    <section class="map-container">
+        <h2 class="text-center mb-4">🗺️ Mapa de la Odisea</h2>
+        
+        <div class="stations-grid">
+            
+            <!-- Estación 1 -->
+            <a href="estaciones/01-despertar.html" class="station-card" data-station="1">
+                <div class="station-number">1</div>
+                <i class="bi bi-sunrise station-icon" style="color: #f39c12;"></i>
+                <h3 class="station-title">El Despertar</h3>
+                <p class="station-description">
+                    FOMO vs JOMO: Una reflexión sobre nuestra actitud frente a la IA
+                </p>
+                <div class="station-status">
+                    <i class="bi bi-circle"></i>
+                    <span>Por iniciar</span>
+                </div>
+            </a>
+
+            <!-- Estación 2 -->
+            <a href="estaciones/02-oraculo.html" class="station-card locked" data-station="2">
+                <div class="station-number">2</div>
+                <i class="bi bi-film station-icon" style="color: #e74c3c;"></i>
+                <h3 class="station-title">El Oráculo del Cine</h3>
+                <p class="station-description">
+                    Películas que predicen y cuestionan la IA
+                </p>
+                <div class="station-status status-locked">
+                    <i class="bi bi-lock-fill"></i>
+                    <span>Bloqueada</span>
+                </div>
+            </a>
+
+            <!-- Estación 3 -->
+            <a href="estaciones/03-prompts.html" class="station-card locked" data-station="3">
+                <div class="station-number">3</div>
+                <i class="bi bi-code-square station-icon" style="color: #9b59b6;"></i>
+                <h3 class="station-title">Laboratorio de Prompts</h3>
+                <p class="station-description">
+                    Frameworks y técnicas de ingeniería de prompts
+                </p>
+                <div class="station-status status-locked">
+                    <i class="bi bi-lock-fill"></i>
+                    <span>Bloqueada</span>
+                </div>
+            </a>
+
+            <!-- Estación 4 -->
+            <a href="estaciones/04-arsenal.html" class="station-card locked" data-station="4">
+                <div class="station-number">4</div>
+                <i class="bi bi-tools station-icon" style="color: #3498db;"></i>
+                <h3 class="station-title">Arsenal de Herramientas</h3>
+                <p class="station-description">
+                    8 herramientas de IA + Desafío Multimodal con Gemini
+                </p>
+                <div class="station-status status-locked">
+                    <i class="bi bi-lock-fill"></i>
+                    <span>Bloqueada</span>
+                </div>
+            </a>
+
+            <!-- Estación 5 -->
+            <a href="estaciones/05-agentes.html" class="station-card locked" data-station="5">
+                <div class="station-number">5</div>
+                <i class="bi bi-robot station-icon" style="color: #1abc9c;"></i>
+                <h3 class="station-title">Taller de Agentes</h3>
+                <p class="station-description">
+                    GPTs, Gems, Copilot y tareas automatizadas
+                </p>
+                <div class="station-status status-locked">
+                    <i class="bi bi-lock-fill"></i>
+                    <span>Bloqueada</span>
+                </div>
+            </a>
+
+            <!-- Estación 6 -->
+            <a href="estaciones/06-guias.html" class="station-card locked" data-station="6">
+                <div class="station-number">6</div>
+                <i class="bi bi-ladder station-icon" style="color: #e67e22;"></i>
+                <h3 class="station-title">Taxonomía en Acción</h3>
+                <p class="station-description">
+                    Creación de guías con la Taxonomía de Bloom
+                </p>
+                <div class="station-status status-locked">
+                    <i class="bi bi-lock-fill"></i>
+                    <span>Bloqueada</span>
+                </div>
+            </a>
+
+            <!-- Estación 7 -->
+            <a href="estaciones/07-instrumentos.html" class="station-card locked" data-station="7">
+                <div class="station-number">7</div>
+                <i class="bi bi-clipboard-check station-icon" style="color: #2ecc71;"></i>
+                <h3 class="station-title">El Forjador de Instrumentos</h3>
+                <p class="station-description">
+                    Rúbricas, listas de chequeo y herramientas de evaluación
+                </p>
+                <div class="station-status status-locked">
+                    <i class="bi bi-lock-fill"></i>
+                    <span>Bloqueada</span>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- Badges Section -->
+    <section class="badges-section">
+        <h2 class="mb-4">🏆 Insignias de la Odisea</h2>
+        <div class="badges-grid">
+            <div class="badge-item">
+                <div class="badge-icon locked" id="badge-1">
+                    🌅
+                </div>
+                <span class="badge-name">Despertar</span>
+            </div>
+            <div class="badge-item">
+                <div class="badge-icon locked" id="badge-2">
+                    🎬
+                </div>
+                <span class="badge-name">Cinéfilo IA</span>
+            </div>
+            <div class="badge-item">
+                <div class="badge-icon locked" id="badge-3">
+                    🔬
+                </div>
+                <span class="badge-name">Alquimista</span>
+            </div>
+            <div class="badge-item">
+                <div class="badge-icon locked" id="badge-4">
+                    🛠️
+                </div>
+                <span class="badge-name">Multimodal</span>
+            </div>
+            <div class="badge-item">
+                <div class="badge-icon locked" id="badge-5">
+                    🤖
+                </div>
+                <span class="badge-name">Creador</span>
+            </div>
+            <div class="badge-item">
+                <div class="badge-icon locked" id="badge-6">
+                    📚
+                </div>
+                <span class="badge-name">Arquitecto</span>
+            </div>
+            <div class="badge-item">
+                <div class="badge-icon locked" id="badge-7">
+                    ⚖️
+                </div>
+                <span class="badge-name">Forjador</span>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('odisea-theme') || 'dark';
+        bodyElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = bodyElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            bodyElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('odisea-theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+        
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'bi bi-sun-fill';
+            } else {
+                icon.className = 'bi bi-moon-stars-fill';
+            }
+        }
+
+        // Progress System
+        const progressData = {
+            stations: {
+                1: false,
+                2: false,
+                3: false,
+                4: false,
+                5: false,
+                6: false,
+                7: false
+            },
+            badges: {
+                1: false,
+                2: false,
+                3: false,
+                4: false,
+                5: false,
+                6: false,
+                7: false
+            }
+        };
+
+        // Load progress from localStorage
+        function loadProgress() {
+            const saved = localStorage.getItem('odisea-progress');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.assign(progressData, data);
+            }
+            updateUI();
+        }
+
+        // Save progress to localStorage
+        function saveProgress() {
+            localStorage.setItem('odisea-progress', JSON.stringify(progressData));
+        }
+
+        // Update UI based on progress
+        function updateUI() {
+            // Update progress bar
+            const completed = Object.values(progressData.stations).filter(v => v).length;
+            const percentage = (completed / 7) * 100;
+            
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = Math.round(percentage) + '% Completado';
+            document.getElementById('stationsCompleted').textContent = completed + '/7 Estaciones';
+
+            // Update station cards
+            document.querySelectorAll('.station-card').forEach((card, index) => {
+                const stationNum = index + 1;
+                const statusDiv = card.querySelector('.station-status');
+                const statusIcon = statusDiv.querySelector('i');
+                const statusText = statusDiv.querySelector('span');
+
+                if (progressData.stations[stationNum]) {
+                    card.classList.add('completed');
+                    card.classList.remove('locked');
+                    statusIcon.className = 'bi bi-check-circle-fill';
+                    statusText.textContent = 'Completada';
+                    statusDiv.classList.add('status-completed');
+                    statusDiv.classList.remove('status-locked');
+                } else if (stationNum === 1 || progressData.stations[stationNum - 1]) {
+                    card.classList.remove('locked');
+                    statusIcon.className = 'bi bi-circle';
+                    statusText.textContent = 'Disponible';
+                    statusDiv.classList.remove('status-locked');
+                }
+            });
+
+            // Update badges
+            Object.keys(progressData.badges).forEach(badgeNum => {
+                const badgeEl = document.getElementById('badge-' + badgeNum);
+                if (progressData.badges[badgeNum]) {
+                    badgeEl.classList.remove('locked');
+                    badgeEl.classList.add('earned');
+                }
+            });
+        }
+
+        // Prevent navigation to locked stations
+        document.querySelectorAll('.station-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (card.classList.contains('locked')) {
+                    e.preventDefault();
+                    alert('⚠️ Esta estación está bloqueada. Completa la estación anterior para desbloquearla.');
+                }
+            });
+        });
+
+        // Initialize
+        loadProgress();
+
+        // Expose functions for stations to use
+        window.odiseaProgress = {
+            completeStation: (stationNum) => {
+                progressData.stations[stationNum] = true;
+                saveProgress();
+                updateUI();
+            },
+            earnBadge: (badgeNum) => {
+                progressData.badges[badgeNum] = true;
+                saveProgress();
+                updateUI();
+            },
+            getProgress: () => progressData,
+            resetProgress: () => {
+                localStorage.removeItem('odisea-progress');
+                location.reload();
+            }
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estación 3: Laboratorio de Prompts - Odisea IA</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4facfe;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --dark-bg: #0f0c29;
+            --dark-card: #1a1640;
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --text-dark: #ffffff;
+            --text-light: #2d3436;
+            --glow: rgba(102, 126, 234, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+        }
+
+        body[data-theme="dark"] {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #2d1b69 100%);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] {
+            background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 100%);
+            color: var(--text-light);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        body[data-theme="dark"] .nav-bar {
+            background: rgba(15, 12, 41, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .nav-bar {
+            background: rgba(248, 249, 250, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-5px);
+            color: white;
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px var(--glow);
+        }
+
+        .theme-toggle i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Header */
+        .station-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .station-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .station-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #c084fc, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .station-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            border: 2px solid;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        body[data-theme="dark"] .tab-btn {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] .tab-btn {
+            border-color: rgba(0, 0, 0, 0.2);
+            color: var(--text-light);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--glow);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Comparison Section */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .prompt-card {
+            padding: 2rem;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body[data-theme="dark"] .prompt-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .prompt-card {
+            background: var(--light-card);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .prompt-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .prompt-card.bad::before {
+            background: var(--danger);
+        }
+
+        .prompt-card.good::before {
+            background: var(--success);
+        }
+
+        .prompt-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .prompt-label.bad {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+        }
+
+        .prompt-label.good {
+            background: rgba(74, 172, 254, 0.2);
+            color: var(--success);
+        }
+
+        .prompt-text {
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 1rem 0;
+        }
+
+        body[data-theme="dark"] .prompt-text {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        body[data-theme="light"] .prompt-text {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .prompt-analysis {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        body[data-theme="dark"] .prompt-analysis {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body[data-theme="light"] .prompt-analysis {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .try-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .try-btn:hover {
+            background: #3498db;
+            transform: translateY(-2px);
+        }
+
+        /* Generator Section */
+        .generator-card {
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+        }
+
+        body[data-theme="dark"] .generator-card {
+            background: var(--dark-card);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+
+        body[data-theme="light"] .generator-card {
+            background: var(--light-card);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .framework-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .framework-tab {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        body[data-theme="dark"] .framework-tab {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] .framework-tab {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-light);
+        }
+
+        .framework-tab:hover {
+            border-color: var(--primary);
+        }
+
+        .framework-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .framework-section {
+            display: none;
+        }
+
+        .framework-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+
+        body[data-theme="dark"] .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-dark);
+        }
+
+        body[data-theme="light"] .input-field {
+            background: white;
+            border-color: rgba(0, 0, 0, 0.1);
+            color: var(--text-light);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--glow);
+        }
+
+        .output-box {
+            padding: 2rem;
+            border-radius: 15px;
+            min-height: 200px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        body[data-theme="dark"] .output-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .output-box {
+            background: rgba(0, 0, 0, 0.03);
+            border: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--success), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px var(--glow);
+        }
+
+        /* Complete Button */
+        .complete-section {
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .btn-complete {
+            padding: 1.5rem 3rem;
+            background: linear-gradient(135deg, var(--success), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-complete:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px var(--glow);
+        }
+
+        /* Success Modal */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .success-modal.active {
+            display: flex;
+        }
+
+        .success-content {
+            max-width: 500px;
+            width: 90%;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        body[data-theme="dark"] .success-content {
+            background: var(--dark-card);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body[data-theme="light"] .success-content {
+            background: var(--light-card);
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .success-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .badge-earned {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--success), var(--primary));
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            margin: 1.5rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs-container {
+                gap: 0.5rem;
+            }
+
+            .tab-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="nav-content">
+            <a href="../index.html" class="back-btn">
+                <i class="bi bi-arrow-left"></i>
+                Volver al Mapa
+            </a>
+            <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                <i class="bi bi-sun-fill"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Header -->
+        <header class="station-header">
+            <div class="station-icon">🔬</div>
+            <h1 class="station-title">Laboratorio de Prompts</h1>
+            <p class="station-subtitle">
+                Domina el arte de comunicarte con la IA: frameworks, ejemplos prácticos SENA y tu propio generador de prompts
+            </p>
+        </header>
+
+        <!-- Main Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="comparisons">
+                <i class="bi bi-shuffle"></i> Comparaciones
+            </button>
+            <button class="tab-btn" data-tab="frameworks">
+                <i class="bi bi-grid-3x3-gap"></i> Frameworks
+            </button>
+            <button class="tab-btn" data-tab="generator">
+                <i class="bi bi-code-square"></i> Generador
+            </button>
+        </div>
+
+        <!-- Tab: Comparisons -->
+        <div id="comparisons" class="tab-content active">
+            <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">
+                ❌ Prompts Malos vs ✅ Prompts Buenos
+            </h2>
+
+            <!-- Example 1: Plan de Sesión -->
+            <div class="comparison-grid">
+                <div class="prompt-card bad">
+                    <span class="prompt-label bad">❌ PROMPT MALO</span>
+                    <h3>Caso: Plan de Sesión</h3>
+                    <div class="prompt-text">
+haz un plan de clase para mi formación
+                    </div>
+                    <div class="prompt-analysis">
+                        <strong>¿Por qué falla?</strong>
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>Sin contexto ni competencia específica</li>
+                            <li>No define duración ni metodología</li>
+                            <li>Resultado genérico e inutilizable</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="prompt-card good">
+                    <span class="prompt-label good">✅ PROMPT BUENO</span>
+                    <h3>Caso: Plan de Sesión</h3>
+                    <div class="prompt-text">
+<strong style="color: var(--success);">Rol:</strong> Actúa como instructor SENA experto en pedagogía activa.
+
+<strong style="color: var(--success);">Tarea:</strong> Diseña un plan de sesión de 4 horas para la competencia "Implementar estructuras de bases de datos" del programa Tecnólogo en ADSI.
+
+<strong style="color: var(--success);">Formato:</strong> Incluye: objetivo, actividades paso a paso con tiempos, recursos necesarios y criterios de evaluación.
+                    </div>
+                    <div class="prompt-analysis">
+                        <strong style="color: var(--success);">¿Por qué funciona?</strong>
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>Define rol experto y contexto SENA</li>
+                            <li>Competencia específica del programa</li>
+                            <li>Estructura clara y aplicable</li>
+                        </ul>
+                    </div>
+                    <button class="try-btn" onclick="window.open('https://gemini.google.com', '_blank')">
+                        <i class="bi bi-rocket-takeoff"></i> Probar en Gemini
+                    </button>
+                </div>
+            </div>
+
+            <!-- Example 2: Actividad de Evaluación -->
+            <div class="comparison-grid">
+                <div class="prompt-card bad">
+                    <span class="prompt-label bad">❌ PROMPT MALO</span>
+                    <h3>Caso: Actividad de Evaluación</h3>
+                    <div class="prompt-text">
+necesito una actividad para evaluar
+                    </div>
+                    <div class="prompt-analysis">
+                        <strong>¿Por qué falla?</strong>
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>No especifica qué evaluar</li>
+                            <li>Sin nivel de Bloom definido</li>
+                            <li>Falta tipo de actividad</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="prompt-card good">
+                    <span class="prompt-label good">✅ PROMPT BUENO</span>
+                    <h3>Caso: Actividad de Evaluación</h3>
+                    <div class="prompt-text">
+<strong style="color: var(--success);">Contexto:</strong> Formación técnica en Soldadura, resultado de aprendizaje "Aplicar técnicas de soldadura SMAW".
+
+<strong style="color: var(--success);">Acción:</strong> Crea una actividad práctica de evaluación nivel "Aplicar" de Bloom.
+
+<strong style="color: var(--success);">Resultados:</strong> Debe incluir: descripción del ejercicio, materiales, criterios de evaluación y rúbrica de 3 niveles (insuficiente, aceptable, excelente).
+                    </div>
+                    <div class="prompt-analysis">
+                        <strong style="color: var(--success);">¿Por qué funciona?</strong>
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>Contexto técnico específico</li>
+                            <li>Nivel taxonómico claro</li>
+                            <li>Resultado medible y estructurado</li>
+                        </ul>
+                    </div>
+                    <button class="try-btn" onclick="window.open('https://gemini.google.com', '_blank')">
+                        <i class="bi bi-rocket-takeoff"></i> Probar en Gemini
+                    </button>
+                </div>
+            </div>
+
+            <!-- Example 3: Proyecto Formativo -->
+            <div class="comparison-grid">
+                <div class="prompt-card bad">
+                    <span class="prompt-label bad">❌ PROMPT MALO</span>
+                    <h3>Caso: Idea de Proyecto</h3>
+                    <div class="prompt-text">
+dame ideas de proyectos
+                    </div>
+                    <div class="prompt-analysis">
+                        <strong>¿Por qué falla?</strong>
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>Sin programa ni sector productivo</li>
+                            <li>No define alcance ni impacto</li>
+                            <li>Resultados irrelevantes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="prompt-card good">
+                    <span class="prompt-label good">✅ PROMPT BUENO</span>
+                    <h3>Caso: Idea de Proyecto</h3>
+                    <div class="prompt-text">
+<strong style="color: var(--success);">Rol:</strong> Eres asesor de proyectos formativos del SENA con conocimiento del sector agroindustrial.
+
+<strong style="color: var(--success);">Tarea:</strong> Genera 5 ideas de proyectos formativos para el programa Tecnología en Gestión Logística, aplicables a empresas cafeteras del Eje Cafetero.
+
+<strong style="color: var(--success);">Formato:</strong> Presenta cada idea con: título, problema a resolver, impacto esperado y competencias SENA involucradas.
+                    </div>
+                    <div class="prompt-analysis">
+                        <strong style="color: var(--success);">¿Por qué funciona?</strong>
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>Rol experto en sector específico</li>
+                            <li>Programa y contexto regional definido</li>
+                            <li>Estructura alineada con metodología SENA</li>
+                        </ul>
+                    </div>
+                    <button class="try-btn" onclick="window.open('https://gemini.google.com', '_blank')">
+                        <i class="bi bi-rocket-takeoff"></i> Probar en Gemini
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Frameworks -->
+        <div id="frameworks" class="tab-content">
+            <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">
+                📚 Frameworks para Construir Prompts Efectivos
+            </h2>
+
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div style="padding: 2rem; border-radius: 20px; margin-bottom: 2rem;" class="prompt-card good">
+                    <h3 style="margin-bottom: 1rem;">🎯 TAO - Tarea, Acción, Objetivo</h3>
+                    <p style="margin-bottom: 1rem;"><strong>Para qué sirve:</strong> Estructura básica para tareas simples y directas.</p>
+                    <div class="prompt-text">
+<strong style="color: var(--success);">Tarea:</strong> Qué quieres que haga
+<strong style="color: var(--success);">Acción:</strong> Cómo lo debe hacer
+<strong style="color: var(--success);">Objetivo:</strong> Para qué lo necesitas
+                    </div>
+                    <p style="margin-top: 1rem; opacity: 0.8;"><strong>Ejemplo SENA:</strong> "Genera el marco teórico (T) basado en 3 fuentes académicas citadas en APA (A) para incluirlo en mi proyecto formativo (O)"</p>
+                </div>
+
+                <div style="padding: 2rem; border-radius: 20px; margin-bottom: 2rem;" class="prompt-card good">
+                    <h3 style="margin-bottom: 1rem;">👤 RTF - Rol, Tarea, Formato</h3>
+                    <p style="margin-bottom: 1rem;"><strong>Para qué sirve:</strong> Cuando necesitas expertise específico y presentación profesional.</p>
+                    <div class="prompt-text">
+<strong style="color: var(--success);">Rol:</strong> Quién debe ser la IA
+<strong style="color: var(--success);">Tarea:</strong> Qué debe hacer
+<strong style="color: var(--success);">Formato:</strong> Cómo presentar el resultado
+                    </div>
+                    <p style="margin-top: 1rem; opacity: 0.8;"><strong>Ejemplo SENA:</strong> "Actúa como instructor de Mecatrónica (R), diseña una práctica de laboratorio sobre circuitos PLC (T), en formato de guía didáctica con objetivos, materiales, pasos y criterios de evaluación (F)"</p>
+                </div>
+
+                <div style="padding: 2rem; border-radius: 20px; margin-bottom: 2rem;" class="prompt-card good">
+                    <h3 style="margin-bottom: 1rem;">🔄 ADP - Antes, Después, Puente</h3>
+                    <p style="margin-bottom: 1rem;"><strong>Para qué sirve:</strong> Ideal para transformaciones y soluciones creativas.</p>
+                    <div class="prompt-text">
+<strong style="color: var(--success);">Antes:</strong> Situación problema actual
+<strong style="color: var(--success);">Después:</strong> Resultado deseado
+<strong style="color: var(--success);">Puente:</strong> Cómo llegar allá
+                    </div>
+                    <p style="margin-top: 1rem; opacity: 0.8;"><strong>Ejemplo SENA:</strong> "Mis aprendices tienen dificultad para redactar informes técnicos (A), quiero que escriban reportes claros y profesionales (D), genera una plantilla editable con ejemplos (P)"</p>
+                </div>
+
+                <div style="padding: 2rem; border-radius: 20px; margin-bottom: 2rem;" class="prompt-card good">
+                    <h3 style="margin-bottom: 1rem;">💎 CARE - Contexto, Acción, Resultados, Ejemplos</h3>
+                    <p style="margin-bottom: 1rem;"><strong>Para qué sirve:</strong> El más completo, para proyectos complejos.</p>
+                    <div class="prompt-text">
+<strong style="color: var(--success);">Contexto:</strong> Situación y antecedentes
+<strong style="color: var(--success);">Acción:</strong> Qué debe hacer la IA
+<strong style="color: var(--success);">Resultados:</strong> Qué esperas obtener
+<strong style="color: var(--success);">Ejemplos:</strong> Referencias o modelos
+                    </div>
+                    <p style="margin-top: 1rem; opacity: 0.8;"><strong>Ejemplo SENA:</strong> "Soy instructor de Gastronomía preparando un taller de cocina molecular (C), diseña un plan de sesión de 6 horas (A), debe incluir teoría, 3 recetas prácticas y evaluación (R), similar a las guías que usamos en formación complementaria (E)"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Generator -->
+        <div id="generator" class="tab-content">
+            <div class="generator-card">
+                <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">
+                    🛠️ Tu Generador de Prompts
+                </h2>
+
+                <!-- Framework Selector -->
+                <div class="framework-tabs">
+                    <button class="framework-tab active" data-framework="tao">TAO</button>
+                    <button class="framework-tab" data-framework="rtf">RTF</button>
+                    <button class="framework-tab" data-framework="adp">ADP</button>
+                    <button class="framework-tab" data-framework="care">CARE</button>
+                </div>
+
+                <!-- TAO Framework -->
+                <div id="tao-section" class="framework-section active">
+                    <div class="input-group">
+                        <label class="input-label">📋 Tarea (Qué quieres)</label>
+                        <textarea class="input-field" rows="3" placeholder="Ej: Generar el marco teórico para un proyecto sobre agricultura de precisión..."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">⚙️ Acción (Cómo lo quieres)</label>
+                        <textarea class="input-field" rows="3" placeholder="Ej: ...basado en 3 artículos de investigación de la biblioteca SENA y citando en normas APA 7..."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">🎯 Objetivo (Para qué lo necesitas)</label>
+                        <textarea class="input-field" rows="3" placeholder="Ej: ...para incluirlo en el documento del proyecto formativo y presentarlo al comité de evaluación."></textarea>
+                    </div>
+                </div>
+
+                <!-- RTF Framework -->
+                <div id="rtf-section" class="framework-section">
+                    <div class="input-group">
+                        <label class="input-label">👤 Rol (Quién debe ser la IA)</label>
+                        <textarea class="input-field" rows="3" placeholder="Ej: Actúa como un asesor del Fondo Emprender con experiencia en modelos de negocio Canvas..."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">📋 Tarea (Qué debe hacer)</label>
+                        <textarea class="input-field" rows="3" placeholder="Ej: ...evalúa la viabilidad de una idea de negocio para una app de turismo en el Eje Cafetero y sugiere 3 mejoras clave."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">📊 Formato (Cómo presentarlo)</label>
+                        <textarea class="input-field" rows="3" placeholder="Ej: Presenta el análisis en una tabla con columnas para 'Fortaleza', 'Debilidad' y 'Sugerencia de Mejora'."></textarea>
+                    </div>
+                </div>
+
+                <!-- ADP Framework -->
+                <div id="adp-section" class="framework-section">
+                    <div class="input-group">
+                        <label class="input-label">❌ Antes (Situación problema)</label>
+                        <textarea class="input-field" rows="3" placeholder="Ej: Mi unidad productiva de confección tiene dificultades para vender online porque las descripciones de los productos son aburridas."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">✅ Después (Resultado deseado)</label>
+                        <textarea class="input-field" rows="3" placeholder="Ej: Quiero tener descripciones de producto persuasivas que resalten la calidad artesanal y conecten con un público joven en redes sociales."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">🌉 Puente (Cómo llegar allá)</label>
+                        <textarea class="input-field" rows="3" placeholder="Ej: Crea 3 ejemplos de descripciones para una chaqueta de jean intervenida a mano, listas para copiar y pegar en Instagram."></textarea>
+                    </div>
+                </div>
+
+                <!-- CARE Framework -->
+                <div id="care-section" class="framework-section">
+                    <div class="input-group">
+                        <label class="input-label">🌍 Contexto (Situación)</label>
+                        <textarea class="input-field" rows="2" placeholder="Ej: Soy un aprendiz de Tecnólogo en ADSI y estoy en la fase de planeación de mi proyecto formativo."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">⚡ Acción (Qué hacer)</label>
+                        <textarea class="input-field" rows="2" placeholder="Ej: Genera una estructura de base de datos relacional para una aplicación que gestiona el inventario de un taller de motos."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">🎁 Resultados (Qué esperas)</label>
+                        <textarea class="input-field" rows="2" placeholder="Ej: El resultado debe ser un script SQL con las tablas 'Clientes', 'Motos', 'Repuestos' y 'Servicios', incluyendo llaves primarias y foráneas."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">💡 Ejemplos (Referencias)</label>
+                        <textarea class="input-field" rows="2" placeholder="Ej: La tabla 'Clientes' debe tener campos como 'nombre', 'cedula', 'telefono', similar a los sistemas de información que usamos en la formación."></textarea>
+                    </div>
+                </div>
+
+                <!-- Output -->
+                <h3 style="margin-top: 3rem; margin-bottom: 1rem; font-size: 1.5rem;">📝 Tu Prompt Generado:</h3>
+                <div id="output-prompt" class="output-box">Tu prompt estructurado aparecerá aquí...</div>
+                
+                <button class="copy-btn" id="copyBtn">
+                    <i class="bi bi-clipboard"></i>
+                    <span id="copyText">Copiar Prompt</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Complete Section -->
+        <div class="complete-section">
+            <button class="btn-complete" id="completeBtn">
+                <i class="bi bi-check-circle-fill"></i>
+                Completar Estación
+            </button>
+            <p style="margin-top: 1rem; opacity: 0.7;">
+                <i class="bi bi-info-circle"></i> Has explorado las técnicas de prompting efectivo
+            </p>
+        </div>
+
+    </main>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">🔬</div>
+            <h2 class="success-title">¡Estación Completada!</h2>
+            <div class="badge-earned">
+                <i class="bi bi-award-fill"></i>
+                Insignia "Alquimista de Prompts" Obtenida
+            </div>
+            <p style="opacity: 0.8; margin-bottom: 2rem;">
+                Has dominado el arte de comunicarte con la IA. ¡La siguiente estación está desbloqueada!
+            </p>
+            <button class="btn-complete" onclick="window.location.href='../index.html'">
+                <i class="bi bi-map"></i>
+                Volver al Mapa
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const bodyElement = document.body;
+        
+        const savedTheme = localStorage.getItem('odisea-theme') || 'dark';
+        bodyElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = bodyElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            bodyElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('odisea-theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+        
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            if (theme === 'dark') {
+                icon.className = 'bi bi-sun-fill';
+            } else {
+                icon.className = 'bi bi-moon-stars-fill';
+            }
+        }
+
+        // Main Tabs
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const targetTab = btn.dataset.tab;
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === targetTab) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Framework Tabs in Generator
+        const frameworkTabs = document.querySelectorAll('.framework-tab');
+        const frameworkSections = document.querySelectorAll('.framework-section');
+        let activeFramework = 'tao';
+
+        frameworkTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                frameworkTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                activeFramework = tab.dataset.framework;
+                frameworkSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === `${activeFramework}-section`) {
+                        section.classList.add('active');
+                    }
+                });
+                updatePrompt();
+            });
+        });
+
+        // Update Prompt Output
+        const inputs = document.querySelectorAll('.input-field');
+        const outputPrompt = document.getElementById('output-prompt');
+
+        function updatePrompt() {
+            const section = document.getElementById(`${activeFramework}-section`);
+            const fields = section.querySelectorAll('.input-field');
+            const labels = section.querySelectorAll('.input-label');
+            
+            let parts = [];
+            fields.forEach((field, index) => {
+                const value = field.value.trim();
+                if (value) {
+                    const labelText = labels[index].textContent.split(' ')[1]; // Get label without emoji
+                    parts.push(`<strong style="color: var(--success);">${labelText}:</strong>\n${value}`);
+                }
+            });
+
+            if (parts.length > 0) {
+                outputPrompt.innerHTML = parts.join('\n\n');
+            } else {
+                outputPrompt.textContent = 'Tu prompt estructurado aparecerá aquí...';
+            }
+        }
+
+        inputs.forEach(input => {
+            input.addEventListener('input', updatePrompt);
+        });
+
+        // Copy Button
+        const copyBtn = document.getElementById('copyBtn');
+        const copyText = document.getElementById('copyText');
+
+        copyBtn.addEventListener('click', () => {
+            const textToCopy = outputPrompt.textContent;
+            if (textToCopy === 'Tu prompt estructurado aparecerá aquí...') {
+                return;
+            }
+
+            // Remove HTML tags for plain text copy
+            const plainText = textToCopy.replace(/<[^>]*>/g, '').trim();
+
+            navigator.clipboard.writeText(plainText).then(() => {
+                copyText.textContent = '¡Copiado!';
+                copyBtn.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
+                
+                setTimeout(() => {
+                    copyText.textContent = 'Copiar Prompt';
+                    copyBtn.style.background = 'linear-gradient(135deg, var(--success), var(--primary))';
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar:', err);
+                copyText.textContent = 'Error';
+            });
+        });
+
+        // Complete Station
+        document.getElementById('completeBtn').addEventListener('click', () => {
+            localStorage.setItem('odisea-station3-completed', 'true');
+            
+            // Update progress
+            if (window.odiseaProgress) {
+                window.odiseaProgress.completeStation(3);
+                window.odiseaProgress.earnBadge(3);
+            } else {
+                const progress = JSON.parse(localStorage.getItem('odisea-progress') || '{"stations":{},"badges":{}}');
+                progress.stations[3] = true;
+                progress.badges[3] = true;
+                localStorage.setItem('odisea-progress', JSON.stringify(progress));
+            }
+
+            // Show success modal
+            document.getElementById('successModal').classList.add('active');
+        });
+
+        // Check if already completed
+        if (localStorage.getItem('odisea-station3-completed') === 'true') {
+            const header = document.querySelector('.station-header');
+            const badge = document.createElement('div');
+            badge.style.cssText = 'display: inline-block; padding: 0.5rem 1rem; background: var(--success); color: white; border-radius: 20px; font-size: 0.9rem; margin-top: 1rem;';
+            badge.innerHTML = '<i class="bi bi-check-circle-fill"></i> Ya completaste esta estación';
+            header.appendChild(badge);
+        }
+    </script>
+
+</body>
+</html>

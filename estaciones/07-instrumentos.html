@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estación 7: El Forjador - Odisea IA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --success: #4facfe;
+            --forge: #e67e22;
+            --danger: #e74c3c;
+            --dark-bg: #0f0c29;
+            --dark-card: #1a1640;
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --text-dark: #ffffff;
+            --text-light: #2d3436;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+        body[data-theme="dark"] {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #2d1b69 100%);
+            color: var(--text-dark);
+        }
+        body[data-theme="light"] {
+            background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 100%);
+            color: var(--text-light);
+        }
+        h1, h2, h3 { font-family: 'Orbitron', sans-serif; }
+        .nav-bar {
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        body[data-theme="dark"] .nav-bar {
+            background: rgba(15, 12, 41, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        body[data-theme="light"] .nav-bar {
+            background: rgba(248, 249, 250, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background: var(--secondary);
+            transform: translateX(-5px);
+            color: white;
+        }
+        .theme-toggle {
+            background: var(--primary);
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover { transform: scale(1.1); }
+        .theme-toggle i { color: white; font-size: 1.2rem; }
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        .station-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.6s ease;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .station-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        .station-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--forge), var(--danger));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .station-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        .tool-card {
+            padding: 2.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        body[data-theme="dark"] .tool-card {
+            background: var(--dark-card);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        body[data-theme="light"] .tool-card {
+            background: var(--light-card);
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .tool-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--forge);
+            box-shadow: 0 20px 40px rgba(230, 126, 34, 0.3);
+        }
+        .tool-icon { font-size: 4rem; margin-bottom: 1.5rem; display: block; }
+        .tool-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; }
+        .tool-description { opacity: 0.8; margin-bottom: 1.5rem; line-height: 1.6; }
+        .tool-features { list-style: none; padding: 0; }
+        .tool-features li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tool-features li i { color: var(--success); }
+        .generator-container {
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            display: none;
+        }
+        .generator-container.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        body[data-theme="dark"] .generator-container {
+            background: var(--dark-card);
+            border: 2px solid rgba(230, 126, 34, 0.3);
+        }
+        body[data-theme="light"] .generator-container {
+            background: var(--light-card);
+            border: 2px solid rgba(230, 126, 34, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .generator-header { text-align: center; margin-bottom: 3rem; }
+        .generator-title { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; }
+        .back-to-tools {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            color: var(--forge);
+            border: 2px solid var(--forge);
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+        .back-to-tools:hover { background: var(--forge); color: white; }
+        .form-group { margin: 2rem 0; }
+        .form-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        body[data-theme="dark"] .form-input,
+        body[data-theme="dark"] .form-textarea,
+        body[data-theme="dark"] .form-select {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-dark);
+        }
+        body[data-theme="light"] .form-input,
+        body[data-theme="light"] .form-textarea,
+        body[data-theme="light"] .form-select {
+            background: white;
+            border-color: rgba(0, 0, 0, 0.1);
+            color: var(--text-light);
+        }
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--forge);
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.2);
+        }
+        .form-textarea { min-height: 100px; resize: vertical; }
+        .criteria-list { list-style: none; padding: 0; margin: 2rem 0; }
+        .criteria-item {
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            position: relative;
+        }
+        body[data-theme="dark"] .criteria-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        body[data-theme="light"] .criteria-item {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .criteria-item input { width: 100%; margin-bottom: 0.5rem; }
+        .remove-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .remove-btn:hover { transform: scale(1.1); }
+        .add-criteria-btn {
+            padding: 1rem 2rem;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .add-criteria-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 172, 254, 0.3);
+        }
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .preview-table th, .preview-table td {
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid;
+        }
+        body[data-theme="dark"] .preview-table th,
+        body[data-theme="dark"] .preview-table td {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        body[data-theme="light"] .preview-table th,
+        body[data-theme="light"] .preview-table td {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .preview-table th {
+            background: linear-gradient(135deg, var(--forge), var(--danger));
+            color: white;
+            font-weight: 700;
+        }
+        .preview-table td { font-size: 0.95rem; }
+        body[data-theme="dark"] .preview-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        body[data-theme="light"] .preview-table tr:nth-child(even) {
+            background: rgba(0, 0, 0, 0.02);
+        }
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .btn-action {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--forge), var(--danger));
+            color: white;
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(230, 126, 34, 0.4);
+        }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-secondary {
+            background: transparent;
+            color: var(--forge);
+            border: 2px solid var(--forge);
+        }
+        .btn-secondary:hover { background: var(--forge); color: white; }
+        .project-container {
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+            border: 2px solid var(--forge);
+        }
+        body[data-theme="dark"] .project-container {
+            background: rgba(230, 126, 34, 0.05);
+        }
+        body[data-theme="light"] .project-container {
+            background: rgba(230, 126, 34, 0.05);
+        }
+        .project-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .checklist { list-style: none; padding: 0; margin: 2rem 0; }
+        .checklist li {
+            padding: 1rem;
+            margin: 0.75rem 0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+        body[data-theme="dark"] .checklist li {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        body[data-theme="light"] .checklist li {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        .checklist li input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        .checklist li.checked {
+            background: rgba(230, 126, 34, 0.2);
+            border-left: 4px solid var(--forge);
+        }
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        .success-modal.active { display: flex; }
+        .success-content {
+            max-width: 600px;
+            width: 90%;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+        body[data-theme="dark"] .success-content {
+            background: var(--dark-card);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        body[data-theme="light"] .success-content {
+            background: var(--light-card);
+        }
+        .success-icon {
+            font-size: 6rem;
+            margin-bottom: 1rem;
+            animation: bounceIn 0.6s ease;
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+        .success-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .badge-earned {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--forge), var(--danger));
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 968px) {
+            .tools-grid { grid-template-columns: 1fr; }
+            .button-group { flex-direction: column; }
+            .btn-action { min-width: 100%; }
+            .preview-table { font-size: 0.85rem; }
+            .preview-table th, .preview-table td { padding: 0.75rem 0.5rem; }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+<nav class="nav-bar">
+    <div class="nav-content">
+        <a href="../index.html" class="back-btn">
+            <i class="bi bi-arrow-left"></i> Volver al Mapa
+        </a>
+        <button class="theme-toggle" id="themeToggle">
+            <i class="bi bi-sun-fill"></i>
+        </button>
+    </div>
+</nav>
+
+<main class="main-content">
+    <header class="station-header">
+        <div class="station-icon">⚒️</div>
+        <h1 class="station-title">El Forjador de Instrumentos</h1>
+        <p class="station-subtitle">
+            Crea instrumentos de evaluación profesionales: rúbricas, listas de cotejo y matrices con IA
+        </p>
+    </header>
+
+    <section id="toolsSelection">
+        <h2 style="text-align: center; margin-bottom: 3rem;">🛠️ Elige tu Herramienta</h2>
+        <div class="tools-grid">
+            <div class="tool-card" onclick="showGenerator('rubric')">
+                <div class="tool-icon">📋</div>
+                <h3 class="tool-title">Generador de Rúbricas</h3>
+                <p class="tool-description">Crea rúbricas analíticas con 5 niveles de desempeño y descriptores detallados</p>
+                <ul class="tool-features">
+                    <li><i class="bi bi-check-circle-fill"></i> 5 niveles de desempeño</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Descriptores por criterio</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Alineación con Bloom</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Exportación lista</li>
+                </ul>
+            </div>
+            <div class="tool-card" onclick="showGenerator('checklist')">
+                <div class="tool-icon">✓</div>
+                <h3 class="tool-title">Creador de Listas de Cotejo</h3>
+                <p class="tool-description">Diseña listas de verificación para evaluación de productos o desempeño</p>
+                <ul class="tool-features">
+                    <li><i class="bi bi-check-circle-fill"></i> Ítems verificables SÍ/NO</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Agrupación por categorías</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Ponderación opcional</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Formato imprimible</li>
+                </ul>
+            </div>
+            <div class="tool-card" onclick="showGenerator('matrix')">
+                <div class="tool-icon">📊</div>
+                <h3 class="tool-title">Constructor de Matrices</h3>
+                <p class="tool-description">Construye matrices de evaluación cruzando criterios con niveles</p>
+                <ul class="tool-features">
+                    <li><i class="bi bi-check-circle-fill"></i> Criterios personalizables</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Niveles de logro</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Vista tabular completa</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Cálculo de puntaje</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="rubricGenerator" class="generator-container">
+        <button class="back-to-tools" onclick="backToTools()">
+            <i class="bi bi-arrow-left"></i> Volver a herramientas
+        </button>
+        <div class="generator-header">
+            <h2 class="generator-title">📋 Generador de Rúbricas</h2>
+            <p style="opacity: 0.8;">Crea rúbricas con 5 niveles de desempeño alineadas a Bloom</p>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Competencia o Actividad a Evaluar</label>
+            <textarea class="form-textarea" id="rubricCompetencia" placeholder="Ej: Aplicar técnicas de soldadura SMAW en posición plana"></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Nivel de Bloom</label>
+            <select class="form-select" id="rubricBloom">
+                <option value="">-- Selecciona --</option>
+                <option value="1">Recordar</option>
+                <option value="2">Comprender</option>
+                <option value="3">Aplicar</option>
+                <option value="4">Analizar</option>
+                <option value="5">Evaluar</option>
+                <option value="6">Crear</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Criterios de Evaluación</label>
+            <p style="opacity: 0.7; font-size: 0.9rem; margin-bottom: 1rem;">Define entre 4-6 criterios que evaluarás</p>
+            <ul class="criteria-list" id="rubricCriteriaList">
+                <li class="criteria-item">
+                    <input type="text" class="form-input" placeholder="Ej: Calidad técnica del trabajo" data-criteria="1">
+                </li>
+            </ul>
+            <button class="add-criteria-btn" onclick="addRubricCriteria()">
+                <i class="bi bi-plus-circle"></i> Agregar Criterio
+            </button>
+        </div>
+        <div class="button-group">
+            <button class="btn-action btn-secondary" onclick="generateRubricAI()">
+                <i class="bi bi-magic"></i> Generar con IA
+            </button>
+            <button class="btn-action btn-primary" onclick="previewRubric()">
+                <i class="bi bi-eye"></i> Vista Previa
+            </button>
+        </div>
+        <div id="rubricPreview" style="display: none; margin-top: 3rem;">
+            <h3 style="margin-bottom: 2rem;">📊 Rúbrica Generada</h3>
+            <div style="overflow-x: auto;">
+                <table class="preview-table" id="rubricTable"></table>
+            </div>
+            <div class="button-group" style="margin-top: 2rem;">
+                <button class="btn-action btn-secondary" onclick="copyRubricText()">
+                    <i class="bi bi-clipboard"></i> Copiar Texto
+                </button>
+                <button class="btn-action btn-primary" onclick="exportRubricHTML()">
+                    <i class="bi bi-file-earmark-code"></i> Exportar HTML
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="checklistGenerator" class="generator-container">
+        <button class="back-to-tools" onclick="backToTools()">
+            <i class="bi bi-arrow-left"></i> Volver a herramientas
+        </button>
+        <div class="generator-header">
+            <h2 class="generator-title">✓ Creador de Listas de Cotejo</h2>
+            <p style="opacity: 0.8;">Diseña listas de verificación para evaluar productos o desempeño</p>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Actividad o Producto a Evaluar</label>
+            <input type="text" class="form-input" id="checklistActividad" placeholder="Ej: Presentación de proyecto formativo">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Ítems a Verificar</label>
+            <p style="opacity: 0.7; font-size: 0.9rem; margin-bottom: 1rem;">Define entre 8-15 ítems verificables</p>
+            <ul class="criteria-list" id="checklistItemsList">
+                <li class="criteria-item">
+                    <input type="text" class="form-input" placeholder="Ej: Presenta introducción clara del problema" data-item="1">
+                </li>
+            </ul>
+            <button class="add-criteria-btn" onclick="addChecklistItem()">
+                <i class="bi bi-plus-circle"></i> Agregar Ítem
+            </button>
+        </div>
+        <div class="button-group">
+            <button class="btn-action btn-secondary" onclick="generateChecklistAI()">
+                <i class="bi bi-magic"></i> Generar con IA
+            </button>
+            <button class="btn-action btn-primary" onclick="previewChecklist()">
+                <i class="bi bi-eye"></i> Vista Previa
+            </button>
+        </div>
+        <div id="checklistPreview" style="display: none; margin-top: 3rem;">
+            <h3 style="margin-bottom: 2rem;">✓ Lista de Cotejo Generada</h3>
+            <div style="overflow-x: auto;">
+                <table class="preview-table" id="checklistTable"></table>
+            </div>
+            <div class="button-group" style="margin-top: 2rem;">
+                <button class="btn-action btn-secondary" onclick="copyChecklistText()">
+                    <i class="bi bi-clipboard"></i> Copiar Texto
+                </button>
+                <button class="btn-action btn-primary" onclick="exportChecklistHTML()">
+                    <i class="bi bi-file-earmark-code"></i> Exportar HTML
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="matrixGenerator" class="generator-container">
+        <button class="back-to-tools" onclick="backToTools()">
+            <i class="bi bi-arrow-left"></i> Volver a herramientas
+        </button>
+        <div class="generator-header">
+            <h2 class="generator-title">📊 Constructor de Matrices</h2>
+            <p style="opacity: 0.8;">Construye matrices cruzando criterios con niveles de desempeño</p>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Competencia a Evaluar</label>
+            <textarea class="form-textarea" id="matrixCompetencia" placeholder="Ej: Análisis de datos con herramientas estadísticas"></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Criterios de Evaluación</label>
+            <ul class="criteria-list" id="matrixCriteriaList">
+                <li class="criteria-item">
+                    <input type="text" class="form-input" placeholder="Ej: Selección de técnicas estadísticas" data-criteria="1">
+                </li>
+            </ul>
+            <button class="add-criteria-btn" onclick="addMatrixCriteria()">
+                <i class="bi bi-plus-circle"></i> Agregar Criterio
+            </button
