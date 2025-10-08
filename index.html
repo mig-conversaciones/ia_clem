@@ -87,12 +87,17 @@
             opacity: 0.8;
         }
 
-        /* Theme Toggle */
-        .theme-toggle {
+        /* Header Controls */
+        .top-controls {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1000;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .control-button {
             background: var(--primary);
             border: none;
             padding: 12px;
@@ -100,16 +105,27 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px var(--shadow-dark);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .theme-toggle:hover {
+        .control-button:hover {
             transform: scale(1.1);
             box-shadow: 0 6px 20px var(--glow);
         }
 
-        .theme-toggle i {
+        .control-button i {
             color: white;
             font-size: 1.5rem;
+        }
+
+        .reset-progress {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+        }
+
+        body[data-theme="light"] .reset-progress {
+            box-shadow: 0 4px 12px var(--shadow-light);
         }
 
         /* Progress Bar */
@@ -368,20 +384,29 @@
                 grid-template-columns: 1fr;
             }
             
-            .theme-toggle {
+            .top-controls {
                 top: 10px;
                 right: 10px;
+                gap: 0.5rem;
+            }
+
+            .control-button {
                 padding: 10px;
             }
         }
     </style>
 </head>
 <body data-theme="dark">
-    
+
     <!-- Theme Toggle Button -->
-    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
-        <i class="bi bi-sun-fill"></i>
-    </button>
+    <div class="top-controls" role="group" aria-label="Controles de navegación">
+        <button class="control-button theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+            <i class="bi bi-sun-fill"></i>
+        </button>
+        <button class="control-button reset-progress" id="resetProgressBtn" aria-label="Reiniciar progreso">
+            <i class="bi bi-arrow-counterclockwise"></i>
+        </button>
+    </div>
 
     <!-- Main Header -->
     <header class="main-header">
@@ -572,10 +597,18 @@
         themeToggle.addEventListener('click', () => {
             const currentTheme = bodyElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
+
             bodyElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('odisea-theme', newTheme);
             updateThemeIcon(newTheme);
+        });
+
+        const resetProgressBtn = document.getElementById('resetProgressBtn');
+        resetProgressBtn.addEventListener('click', () => {
+            const shouldReset = confirm('¿Seguro que deseas reiniciar tu progreso en la Odisea IA?');
+            if (shouldReset && window.odiseaProgress) {
+                window.odiseaProgress.resetProgress();
+            }
         });
         
         function updateThemeIcon(theme) {
